@@ -1,8 +1,24 @@
 .layout {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* viewport height */
-    background-color: #f2f2f2; /* any desired background color */
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* viewport height */
+  background-color: #f2f2f2;
+  /* any desired background color */
+}
+
+.rightAligned {
+  display: flex;
+  flex-direction: column;
+  /* Stack items vertically */
+  align-items: flex-end;
+  /* Align items to the end (right edge) */
+  gap: 10px;
+  padding-left: 50px;
+  /* This provides spacing between the buttons */
+}
+
+.rightAligned .button {
+  width: 150px !important;
+}

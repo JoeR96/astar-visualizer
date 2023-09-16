@@ -22,6 +22,7 @@ interface ButtonProps {
    * Optional click handler
    */
   onClick?: () => void;
+  width?: string;
 }
 
 /**
@@ -32,6 +33,7 @@ export const Button = ({
   size = 'medium',
   backgroundColor,
   label,
+  width,
   ...props
 }: ButtonProps) => {
   // Assigning the correct class based on the "primary" prop.
@@ -42,7 +44,7 @@ export const Button = ({
       type="button"
       // Using an array to manage all the class names and then joining them.
       className={['button', `button--${size}`, mode].join(' ')}
-      style={{ backgroundColor }}
+      style={{ backgroundColor, width: width || 'auto' }} // use the width prop if provided
       {...props}
     >
       {label}

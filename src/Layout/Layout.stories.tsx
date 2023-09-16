@@ -1,6 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { Layout } from './Layout';
 import { Grid } from '../Grid/Grid';
+import { Button } from '../Button/Button'; // Importing the Button component
+import './layout.css'; // Importing the styles
 
 const meta: Meta<typeof Layout> = {
   title: 'Example/Layout',
@@ -18,14 +20,13 @@ type LayoutStoryArgs = {
 };
 
 const CenteredGrid: StoryObj<typeof Layout, LayoutStoryArgs> = (args) => (
-  <Layout>
-    <Grid rows={args.rows} cols={args.cols} />
-  </Layout>
+
+  <Layout/>
 );
 
 CenteredGrid.args = {
-  rows: 5,
-  cols: 5,
+  rows: 8,
+  cols: 12,
 };
 
 CenteredGrid.argTypes = {
