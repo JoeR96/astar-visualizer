@@ -34,17 +34,18 @@ export const Button = ({
   label,
   ...props
 }: ButtonProps) => {
-  const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
+  // Assigning the correct class based on the "primary" prop.
+  const mode = primary ? 'button--primary' : 'button--secondary';
+
   return (
     <button
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
+      // Using an array to manage all the class names and then joining them.
+      className={['button', `button--${size}`, mode].join(' ')}
       style={{ backgroundColor }}
       {...props}
     >
       {label}
-            {label}
-
     </button>
   );
 };

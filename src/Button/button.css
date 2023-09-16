@@ -1,0 +1,38 @@
+.button {
+  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  border: none; /* Using box-shadow for border effect */
+  border-radius: 0.25em;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+  color: #333;  /* Text color */
+  background-color: transparent; /* Transparent background */
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset; /* Inset shadow mimics an inner border */
+  padding: 10px 20px; /* Some padding to give it space */
+  transition: 0.3s; /* Smooth transition for hover effects */
+}
+
+.button:hover {
+  background-color: #1ea7fd; /* Color when hovered */
+  color: white; /* Text color on hover */
+}
+
+.button:active {
+  box-shadow: none; /* Remove shadow effect when button is active/clicked */
+  background-color: #1092d6; /* Slightly darker shade when active */
+}
+
+.button--small {
+  font-size: 12px;
+  padding: 10px 16px;
+}
+.button--medium {
+  font-size: 14px;
+  padding: 11px 20px;
+}
+.button--large {
+  font-size: 16px;
+  padding: 12px 24px;
+}
+
