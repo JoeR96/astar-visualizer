@@ -1,0 +1,8 @@
+.layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* viewport height */
+    background-color: #f2f2f2; /* any desired background color */
+  }
+  
