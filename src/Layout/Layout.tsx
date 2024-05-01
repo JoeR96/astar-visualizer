@@ -2,29 +2,26 @@ import React from 'react';
 import './Layout.css';
 import { Grid } from '../Grid/Grid';
 import { Button } from '../Button/Button';
-import useLayoutStore from './layoutStore'; // Assuming the store is in the same folder for this import
-import { ButtonState, TileState } from '../enums/TileStates';
+import useLayoutStore from './layoutStore';
 import useGridStore from '../Grid/GridStore';
-import { findPath } from '../services/astarService';
+import { ButtonState, TileState } from '../enums/TileStates.ts';
 
 export const Layout: React.FC = () => {
   const { activeButton, setActiveButton } = useLayoutStore();
-  const { rows, cols } = useGridStore();
-
   const { resetAllCells } = useGridStore();
+  const { rows, cols } = useGridStore();
 
   return (
     <div className="layout">
       <Grid rows={rows} cols={cols} />
 
-      <div className="rightAligned">
+      <div className="button-row">
         <Button
           label="Toggle start tile"
           width="150px"
           onClick={() => setActiveButton(ButtonState.START)}
           style={{
-            backgroundColor:
-              activeButton === TileState.START ? 'gray' : 'initial',
+            backgroundColor: activeButton === TileState.START ? 'gray' : 'initial',
           }}
         />
         <Button
@@ -32,8 +29,7 @@ export const Layout: React.FC = () => {
           width="150px"
           onClick={() => setActiveButton(ButtonState.END)}
           style={{
-            backgroundColor:
-              activeButton === TileState.END ? 'gray' : 'initial',
+            backgroundColor: activeButton === TileState.END ? 'gray' : 'initial',
           }}
         />
         <Button
@@ -41,8 +37,7 @@ export const Layout: React.FC = () => {
           width="150px"
           onClick={() => setActiveButton(ButtonState.OBSTACLE)}
           style={{
-            backgroundColor:
-              activeButton === TileState.OBSTACLE ? 'gray' : 'initial',
+            backgroundColor: activeButton === TileState.OBSTACLE ? 'gray' : 'initial',
           }}
         />
         <Button
@@ -50,34 +45,28 @@ export const Layout: React.FC = () => {
           width="150px"
           onClick={() => setActiveButton(ButtonState.RESETTILE)}
           style={{
-              backgroundColor:
-                  activeButton === ButtonState.RESET ? 'gray' : 'initial',
+            backgroundColor: activeButton === ButtonState.RESET ? 'gray' : 'initial',
           }}
-      />
-
+        />
         <Button
           label="Reset Grid"
           width="150px"
           onClick={() => {
-              setActiveButton(TileState.NORMAL);
-              resetAllCells();
+            setActiveButton(TileState.NORMAL);
+            resetAllCells();
           }}
           style={{
-              backgroundColor:
-                  activeButton === ButtonState.RESET ? 'gray' : 'initial',
+            backgroundColor: activeButton === ButtonState.RESET ? 'gray' : 'initial',
           }}
-      />
-
-                <Button
+        />
+        <Button
           label="Find Path"
           width="150px"
-          onClick={findPath}
+          onClick={() => findPath()}
           style={{
-            backgroundColor:
-                activeButton === TileState.NORMAL ? 'gray' : 'initial',
-        }}
+            backgroundColor: activeButton === TileState.NORMAL ? 'gray' : 'initial',
+          }}
         />
-
       </div>
     </div>
   );

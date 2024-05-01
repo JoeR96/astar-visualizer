@@ -1,22 +1,11 @@
 .layout {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  /* viewport height */
-  /* any desired background color */
-}
-
-.rightAligned {
-  display: flex;
   flex-direction: column;
-  /* Stack items vertically */
-  align-items: flex-end;
-  /* Align items to the end (right edge) */
-  gap: 10px;
-  padding-left: 50px;
-  /* This provides spacing between the buttons */
+  align-items: center;
 }
 
-.rightAligned .button {
-  width: 150px !important;
+.button-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Adjust based on your spacing preference */
 }
