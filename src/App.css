@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+.main-heading {
+  text-align: center;    /* Centers the text */
+  font-size: 48px;       /* Large font size */
+  font-weight: bold;     /* Makes the font bold */
+  margin-top: 20px;      /* Adds some space above the heading */
+  margin-bottom: 20px;   /* Adds some space below the heading */
+  color: black;
+}
