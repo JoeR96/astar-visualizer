@@ -15,7 +15,7 @@ describe('heuristic', () => {
     const nodeA: Cell = { row: 3, col: 0, state: CellState.Start };
     const nodeB: Cell = { row: 0, col: 4, state: CellState.End };
 
-    expect(heuristic(nodeA, nodeB)).toBe(7);
+    expect(heuristic(nodeA, nodeB)).toBe(50);
   });
 });
 
@@ -96,9 +96,9 @@ describe('calculateCosts', () => {
 
     const result = calculateCosts(node, neighbor, end);
 
-    expect(result.g).toBe(6);
-    expect(result.h).toBe(4);
-    expect(result.f).toBe(10);
+    expect(result.g).toBe(15);
+    expect(result.h).toBe(28);
+    expect(result.f).toBe(43);
   });
 });
 

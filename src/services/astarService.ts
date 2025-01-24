@@ -2,7 +2,9 @@ import { aStarNode, Cell } from '../types.ts';
 import { CellState } from '../enums.ts';
 
 export const heuristic = (a: Cell, b: Cell): number => {
-  return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
+  const dRow = Math.abs(a.row - b.row);
+  const dCol = Math.abs(a.col - b.col);
+  return Math.floor(10 * Math.sqrt(dRow * dRow + dCol * dCol));
 };
 
 export const initializeStartNode = (
@@ -12,9 +14,9 @@ export const initializeStartNode = (
   return {
     row: start.row,
     col: start.col,
-    g: 0, 
-    h: heuristic(start, end), 
-    f: heuristic(start, end), 
+    g: 0,
+    h: heuristic(start, end),
+    f: heuristic(start, end),
     parent: null,
   };
 };
@@ -56,9 +58,11 @@ export const calculateCosts = (
   neighbor: { col: number; row: number; state: CellState },
   end: { col: number; row: number; state: CellState },
 ): { g: number; h: number; f: number } => {
-  const g = node.g + 1; 
+  const dRow = Math.abs(node.row - neighbor.row);
+  const dCol = Math.abs(node.col - neighbor.col);
+  const g = node.g + (dRow === 0 || dCol === 0 ? 10 : 14);
   const h = heuristic(neighbor, end);
-  const f = g + h; 
+  const f = g + h;
   return { g, h, f };
 };
 
