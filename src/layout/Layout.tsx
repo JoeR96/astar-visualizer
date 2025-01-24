@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '../grid/Grid.tsx';
-import { ControlPanel } from '../control-anel/ControlPanel.tsx';
+import { ControlPanel } from '../control-panel/ControlPanel.tsx';
 
 export const Layout: React.FC = () => {
   return (

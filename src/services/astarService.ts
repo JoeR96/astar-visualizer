@@ -22,19 +22,25 @@ export const initializeStartNode = (
 };
 
 export const getNeighbors = (
-  node : aStarNode,
-  grid: Cell[][]
-): { row : number; col : number; state: CellState; }[] => {
+  node: aStarNode,
+  grid: Cell[][],
+  canTravelDiagonally: boolean
+): { row: number; col: number; state: CellState }[] => {
   const neighbors = [
     { row: node.row - 1, col: node.col },
     { row: node.row + 1, col: node.col },
     { row: node.row, col: node.col - 1 },
     { row: node.row, col: node.col + 1 },
-    { row: node.row - 1, col: node.col - 1 },
-    { row: node.row - 1, col: node.col + 1 },
-    { row: node.row + 1, col: node.col - 1 },
-    { row: node.row + 1, col: node.col + 1 },
   ];
+
+  if (canTravelDiagonally) {
+    neighbors.push(
+      { row: node.row - 1, col: node.col - 1 },
+      { row: node.row - 1, col: node.col + 1 },
+      { row: node.row + 1, col: node.col - 1 },
+      { row: node.row + 1, col: node.col + 1 }
+    );
+  }
 
   return neighbors
     .filter((neighbor) => {
@@ -82,6 +88,7 @@ export const aStar = (
   grid: { col: number; row: number; state: CellState }[][],
   start: FlatArray<Cell[][], 1>,
   end: FlatArray<Cell[][], 1>,
+  canTravelDiagonally: boolean,
 ): { path: aStarNode[]; visitedNodes: aStarNode[] } => {
   const openSet: aStarNode[] = [];
   const closedSet: aStarNode[] = [];
@@ -103,7 +110,7 @@ export const aStar = (
 
     closedSet.push(currentNode);
 
-    const neighbors = getNeighbors(currentNode, grid);
+    const neighbors = getNeighbors(currentNode, grid, canTravelDiagonally);
 
     for (const neighbor of neighbors) {
       if (closedSet.some((node) => node.row === neighbor.row && node.col === neighbor.col)) {

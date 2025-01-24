@@ -1,12 +1,13 @@
 import { StateCreator } from 'zustand';
 import { CellState } from '../enums.ts';
+import { aStar } from '../services/astarService.ts';
+import { aStarNode } from '../types.ts';
 
 type Cell = {
   row: number;
   col: number;
   state: CellState;
 };
-
 
 export interface GridSlice {
   cells: Cell[][];
@@ -19,6 +20,11 @@ export interface GridSlice {
   setNumberOfRows: (numberOfRows: number) => void;
   setCellState: (row: number, col: number, state: CellState) => void;
   resetCells: () => void;
+  handleFindPath: (canTravelDiagonally: boolean) => void;
+  path: aStarNode[];
+  visitedNodes: aStarNode[];
+  setPath: (path: aStarNode[]) => void;
+  setVisitedNodes(visitedNodes: aStarNode[]): void;
 }
 
 export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
@@ -36,6 +42,8 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
   startTile: null,
   endTile: null,
   obstacleTiles: [],
+  path: [],
+  visitedNodes: [],
   setNumberOfColumns: (numberOfColumns) => {
     set((state) => {
       const newCells = state.cells.map((row) => {
@@ -151,6 +159,77 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
       startTile: null,
       endTile: null,
       obstacleTiles: [],
+      path: [],
+      visitedNodes: [],
     }));
+  },
+  handleFindPath: (canTravelDiagonally : boolean) => {
+    set((state) => {
+      const startCell = state.cells.flat().find(cell => cell.state === CellState.Start);
+      const endCell = state.cells.flat().find(cell => cell.state === CellState.End);
+
+      if (startCell && endCell) {
+        const gridForAStar = state.cells.map(row =>
+          row.map(cell => ({
+            row: cell.row,
+            col: cell.col,
+            state: cell.state,
+          }))
+        );
+
+        const { path, visitedNodes } = aStar(gridForAStar, startCell, endCell, canTravelDiagonally);
+
+        const newCellsWithPath = state.cells.map(row =>
+          row.map(cell => ({
+            ...cell,
+            state: path.some(p => p.row === cell.row && p.col === cell.col) ? CellState.Path : cell.state
+          }))
+        );
+
+        const newCellsWithVisited = newCellsWithPath.map(row =>
+          row.map(cell => ({
+            ...cell,
+            state: visitedNodes.some(v => v.row === cell.row && v.col === cell.col) && cell.state === CellState.Empty ? CellState.Visited : cell.state
+          }))
+        );
+
+        return {
+          ...state,
+          cells: newCellsWithVisited,
+          path,
+          visitedNodes,
+        };
+      }
+
+      return state; // Return the state unmodified if start or end cell is not found
+    });
+  },
+  setPath: (path) => {
+    set((state) => {
+      const newCells = state.cells.map(row =>
+        row.map(cell => ({
+          ...cell,
+          state: path.some(p => p.row === cell.row && p.col === cell.col) ? CellState.Path : cell.state,
+        }))
+      );
+      return {
+        ...state,
+        cells: newCells,
+      };
+    });
+  },
+  setVisitedNodes: (visitedNodes) => {
+    set((state) => {
+      const newCells = state.cells.map(row =>
+        row.map(cell => ({
+          ...cell,
+          state: visitedNodes.some(v => v.row === cell.row && v.col === cell.col) && cell.state === CellState.Empty ? CellState.Visited : cell.state,
+        }))
+      );
+      return {
+        ...state,
+        cells: newCells,
+      };
+    });
   },
 });

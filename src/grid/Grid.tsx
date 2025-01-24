@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useControlsBoundedStore } from '../BoundedStore.ts';
 import { CellState } from '../enums.ts';
-import { aStarNode } from '../types.ts';
-import { aStar } from '../services/astarService.ts';
 
 export const Grid: React.FC = () => {
-  const { cells, activeButton, setCellState, setSelectedButtonState } = useControlsBoundedStore();
-  const [path, setPath] = useState<aStarNode[]>([]);
-  const [visitedNodes, setVisitedNodes] = useState<aStarNode[]>([]);
+  const { cells, activeButton, setCellState, setSelectedButtonState, visitedNodes, path } = useControlsBoundedStore();
 
   const handleCellClick = (row: number, col: number) => {
     setCellState(row, col, activeButton);
@@ -23,26 +19,7 @@ export const Grid: React.FC = () => {
         break;
     }
   };
-
-  const handleFindPath = () => {
-    const startCell = cells.flat().find(cell => cell.state === CellState.Start);
-    const endCell = cells.flat().find(cell => cell.state === CellState.End);
-
-    if (startCell && endCell) {
-      const gridForAStar = cells.map(row =>
-        row.map(cell => ({
-          row: cell.row,
-          col: cell.col,
-          state: cell.state,
-        }))
-      );
-
-      const { path, visitedNodes } = aStar(gridForAStar, startCell, endCell);
-      setPath(path);
-      setVisitedNodes(visitedNodes);
-    }
-  };
-
+  
   // Helper function to get the A* node properties (g, h, f) for a specific cell
   const getAStarNodeProperties = (row: number, col: number) => {
     const visitedNode = visitedNodes.find(node => node.row === row && node.col === col);
@@ -127,24 +104,6 @@ export const Grid: React.FC = () => {
           })
         )}
       </div>
-      <button
-        onClick={handleFindPath}
-        style={{
-          position: 'absolute',
-          top: '20px',
-          right: '20px',
-          padding: '10px 20px',
-          fontSize: '16px',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          backgroundColor: '#4CAF50',
-          transition: 'background-color 0.3s ease, transform 0.2s ease',
-        }}
-      >
-        Find Path
-      </button>
     </div>
   );
 };
@@ -163,6 +122,6 @@ const getCellColor = (state: CellState | null, isVisited: boolean): string => {
     case CellState.Empty:
       return 'gray'; // Empty cell color
     default:
-      return '#1e1e1e'; // Default color
+      return 'gray'; // Default color
   }
 };

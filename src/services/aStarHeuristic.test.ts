@@ -58,7 +58,7 @@ describe('getNeighbors', () => {
     ];
 
     const node: aStarNode = { row: 1, col: 1, g: 0, h: 0, f: 0, parent: null };
-    const neighbors = getNeighbors(node, grid);
+    const neighbors = getNeighbors(node, grid, true);
 
     expect(neighbors).toEqual([
       { row: 1, col: 0, state: CellState.Empty },
@@ -125,7 +125,7 @@ describe('aStar', () => {
     const start = { row: 0, col: 0, state: CellState.Start };
     const end = { row: 2, col: 2, state: CellState.End };
 
-    const result = aStar(grid, start, end);
+    const result = aStar(grid, start, end, true);
 
     expect(result.path).to.have.lengthOf(4);
     expect(result.path[0]).to.deep.include({ row: 0, col: 0 });

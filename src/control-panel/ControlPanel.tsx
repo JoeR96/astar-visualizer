@@ -11,6 +11,9 @@ export const ControlPanel: React.FC = () => {
     columns,
     setNumberOfRows,
     setNumberOfColumns,
+    handleFindPath,
+    canTravelDiagonally,
+    setCanTravelDiagonally,
   } = useControlsBoundedStore();
 
   const buttons = [
@@ -26,6 +29,11 @@ export const ControlPanel: React.FC = () => {
 
   const handleResetClick = () => {
     resetCells();
+    setSelectedButtonState(CellState.Start);
+  };
+
+  const handleFindPathClick = () => {
+    handleFindPath(canTravelDiagonally);
   };
 
   return (
@@ -70,6 +78,52 @@ export const ControlPanel: React.FC = () => {
           {button.label}
         </button>
       ))}
+      <button
+        onClick={handleFindPathClick}
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          backgroundColor: '#2196F3',
+          transition: 'background-color 0.3s ease, transform 0.2s ease',
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.backgroundColor = '#0b7dda';
+          e.currentTarget.style.transform = 'scale(1.05)';
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.backgroundColor = '#2196F3';
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
+      >
+        Find Path
+      </button>
+      <button
+        onClick={() => setCanTravelDiagonally(!canTravelDiagonally)}
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          backgroundColor: canTravelDiagonally ? '#FFC107' : '#555555',
+          transition: 'background-color 0.3s ease, transform 0.2s ease',
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.backgroundColor = '#FFA000';
+          e.currentTarget.style.transform = 'scale(1.05)';
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.backgroundColor = canTravelDiagonally ? '#FFC107' : '#555555';
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
+      >
+        {canTravelDiagonally ? 'Disable Diagonal Travel' : 'Enable Diagonal Travel'}
+      </button>
       <div
         style={{
           display: 'flex',
