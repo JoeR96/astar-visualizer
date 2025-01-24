@@ -94,7 +94,10 @@ export const aStar = (
 
     const currentNode = openSet.shift()!;
 
+    // Check if we have reached the end node
     if (currentNode.row === end.row && currentNode.col === end.col) {
+      // Add the end node to the visited nodes before returning
+      closedSet.push(currentNode);
       return { path: reconstructPath(currentNode), visitedNodes: closedSet };
     }
 
@@ -134,5 +137,6 @@ export const aStar = (
     }
   }
 
+  // If no path is found, return an empty path and all visited nodes
   return { path: [], visitedNodes: closedSet };
 };

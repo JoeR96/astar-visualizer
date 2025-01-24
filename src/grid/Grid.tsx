@@ -76,9 +76,22 @@ export const Grid: React.FC = () => {
       >
         {cells.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
-            const isPath = path.some(node => node.row === cell.row && node.col === cell.col);
+            const isPathNode = path.some(node => node.row === cell.row && node.col === cell.col);
             const isVisited = visitedNodes.some(node => node.row === cell.row && node.col === cell.col);
             const { g, h, f } = getAStarNodeProperties(cell.row, cell.col);
+
+            let backgroundColor = getCellColor(cell.state, isVisited);
+
+            if (isPathNode) {
+              const pathIndex = path.findIndex(node => node.row === cell.row && node.col === cell.col);
+              if (pathIndex === 0) {
+                backgroundColor = '#4CAF50'; 
+              } else if (pathIndex === path.length - 1) {
+                backgroundColor = '#FF5252'; 
+              } else {
+                backgroundColor = '#FFD700'; 
+              }
+            }
 
             return (
               <div
@@ -89,7 +102,7 @@ export const Grid: React.FC = () => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   border: '1px solid #333333',
-                  backgroundColor: getCellColor(cell.state, isPath, isVisited),
+                  backgroundColor: backgroundColor,
                   cursor: 'pointer',
                   transition: 'background-color 0.2s ease, transform 0.2s ease',
                 }}
@@ -98,7 +111,7 @@ export const Grid: React.FC = () => {
                   e.currentTarget.style.transform = 'scale(1.05)';
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = getCellColor(cell.state, isPath, isVisited);
+                  e.currentTarget.style.backgroundColor = backgroundColor;
                   e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
@@ -136,10 +149,7 @@ export const Grid: React.FC = () => {
   );
 };
 
-const getCellColor = (state: CellState | null, isPath: boolean, isVisited: boolean): string => {
-  if (isPath) {
-    return '#FFD700'; // Path color
-  }
+const getCellColor = (state: CellState | null, isVisited: boolean): string => {
   if (isVisited) {
     return '#00BFFF'; // Visited nodes color
   }
