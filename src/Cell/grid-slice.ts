@@ -89,7 +89,6 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (set)
     });
   },
   setCellState: (row, col, state) => {
-    console.log("set cell state", CellState[state])
     set((prevState) => {
       const newCells = prevState.cells.map((r) => r.map((cell) => ({ ...cell })));
       let startTile = prevState.startTile;
@@ -106,16 +105,21 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (set)
 
       newCells[row][col].state = state;
  
-      if (state === CellState.Start) {
-        startTile = { row, col };
-      } else if (state === CellState.End) {
-        endTile = { row, col };
-      } else if (state === CellState.Obstacle) {
-        if (!obstacleTiles.some((tile) => tile.row === row && tile.col === col)) {
-          obstacleTiles.push({ row, col });
-        }
-      } else if (state === CellState.Empty) {
-        obstacleTiles = obstacleTiles.filter((tile) => !(tile.row === row && tile.col === col));
+      switch (CellState[state]) {
+        case CellState.Start:
+          startTile = { row, col };
+          break;
+        case CellState.End:
+          endTile = { row, col };
+          break;
+        case CellState.Obstacle:
+          if (!obstacleTiles.some((tile) => tile.row === row && tile.col === col)) {
+            obstacleTiles.push({ row, col });
+          }
+          break;
+        case CellState.Empty:
+          obstacleTiles = obstacleTiles.filter((tile) => !(tile.row === row && tile.col === col));
+          break;
       }
 
       return {

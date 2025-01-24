@@ -1,7 +1,7 @@
 
 export enum CellState {
-  Empty,
-  Obstacle,
-  Start,
-  End,
+  Empty = 0,
+  Obstacle = 1,
+  Start = 2,
+  End = 3,
 }

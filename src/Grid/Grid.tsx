@@ -6,7 +6,6 @@ export const Grid: React.FC = () => {
   const { cells, activeButton, setCellState, setSelectedButtonState } = useControlsBoundedStore();
 
   const handleCellClick = (row: number, col: number) => {
-    console.log("active button", CellState[activeButton])
     setCellState(row, col, activeButton);
 
     switch (activeButton) {
@@ -66,7 +65,7 @@ export const Grid: React.FC = () => {
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >
-              <p style={{ color: 'black' }}>{`${cell.row},${cell.col}`}</p>
+              <p style={{ color: 'white' }}>{`${cell.row},${cell.col}`}</p>
             </div>
           ))
         )}
@@ -82,9 +81,9 @@ const getCellColor = (state: CellState): string => {
     case CellState.End:
       return '#FF5252';
     case CellState.Obstacle:
-      return 'yellow';
-    // case CellState.Empty:
-    //   return 'yellow';
+      return 'black';
+     case CellState.Empty:
+       return 'gray';
     default:
       return '#1e1e1e';
   }
