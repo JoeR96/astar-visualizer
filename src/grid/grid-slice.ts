@@ -201,7 +201,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
         };
       }
 
-      return state; // Return the state unmodified if start or end cell is not found
+      return state;
     });
   },
   setPath: (path) => {

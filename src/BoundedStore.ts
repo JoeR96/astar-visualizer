@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import { createGridSlice } from './cell/grid-slice.ts';
+import { createGridSlice } from './grid/grid-slice.ts';
 import { createControlPanelSlice } from './control-panel/control-panel-slice.ts';
 
 type BoundedStore = ReturnType<typeof createGridSlice> & ReturnType<typeof createControlPanelSlice>;

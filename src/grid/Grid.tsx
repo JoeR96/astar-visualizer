@@ -20,7 +20,6 @@ export const Grid: React.FC = () => {
     }
   };
   
-  // Helper function to get the A* node properties (g, h, f) for a specific cell
   const getAStarNodeProperties = (row: number, col: number) => {
     const visitedNode = visitedNodes.find(node => node.row === row && node.col === col);
     if (visitedNode) {
@@ -110,18 +109,18 @@ export const Grid: React.FC = () => {
 
 const getCellColor = (state: CellState | null, isVisited: boolean): string => {
   if (isVisited) {
-    return '#00BFFF'; // Visited nodes color
+    return '#00BFFF';
   }
   switch (state) {
     case CellState.Start:
-      return '#4CAF50'; // Start cell color
+      return '#4CAF50';
     case CellState.End:
-      return '#FF5252'; // End cell color
+      return '#FF5252';
     case CellState.Obstacle:
-      return 'black'; // Obstacle color
+      return 'black';
     case CellState.Empty:
-      return 'gray'; // Empty cell color
+      return 'gray';
     default:
-      return 'gray'; // Default color
+      return 'gray';
   }
 };
