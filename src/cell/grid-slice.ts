@@ -1,4 +1,5 @@
 import { StateCreator } from 'zustand';
+import { CellState } from '../enums.ts';
 
 type Cell = {
   row: number;
@@ -6,12 +7,6 @@ type Cell = {
   state: CellState;
 };
 
-enum CellState {
-  Empty,
-  Start,
-  End,
-  Obstacle,
-}
 
 export interface GridSlice {
   cells: Cell[][];
@@ -26,13 +21,15 @@ export interface GridSlice {
   resetCells: () => void;
 }
 
-export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (set) => ({
+export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
+  set,
+) => ({
   cells: Array.from({ length: 8 }, (_, row) =>
     Array.from({ length: 12 }, (_, col) => ({
       row,
       col,
       state: CellState.Empty,
-    }))
+    })),
   ),
   rows: 8,
   columns: 12,
@@ -45,11 +42,14 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (set)
         if (numberOfColumns > state.columns) {
           return [
             ...row,
-            ...Array.from({ length: numberOfColumns - state.columns }, (_, col) => ({
-              row: row[0].row,
-              col: state.columns + col,
-              state: CellState.Empty,
-            })),
+            ...Array.from(
+              { length: numberOfColumns - state.columns },
+              (_, col) => ({
+                row: row[0].row,
+                col: state.columns + col,
+                state: CellState.Empty,
+              }),
+            ),
           ];
         }
         return row.slice(0, numberOfColumns);
@@ -74,7 +74,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (set)
               row: state.rows + row,
               col,
               state: CellState.Empty,
-            }))
+            })),
           ),
         ];
       } else {
@@ -90,22 +90,26 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (set)
   },
   setCellState: (row, col, state) => {
     set((prevState) => {
-      const newCells = prevState.cells.map((r) => r.map((cell) => ({ ...cell })));
+      const newCells = prevState.cells.map((r) =>
+        r.map((cell) => ({ ...cell })),
+      );
       let startTile = prevState.startTile;
       let endTile = prevState.endTile;
       let obstacleTiles = [...prevState.obstacleTiles];
       if (state === CellState.Start && prevState.startTile) {
-        newCells[prevState.startTile.row][prevState.startTile.col].state = CellState.Empty;
+        newCells[prevState.startTile.row][prevState.startTile.col].state =
+          CellState.Empty;
         startTile = null;
       }
       if (state === CellState.End && prevState.endTile) {
-        newCells[prevState.endTile.row][prevState.endTile.col].state = CellState.Empty;
+        newCells[prevState.endTile.row][prevState.endTile.col].state =
+          CellState.Empty;
         endTile = null;
       }
 
       newCells[row][col].state = state;
- 
-      switch (CellState[state]) {
+
+      switch (state) {
         case CellState.Start:
           startTile = { row, col };
           break;
@@ -113,12 +117,16 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (set)
           endTile = { row, col };
           break;
         case CellState.Obstacle:
-          if (!obstacleTiles.some((tile) => tile.row === row && tile.col === col)) {
+          if (
+            !obstacleTiles.some((tile) => tile.row === row && tile.col === col)
+          ) {
             obstacleTiles.push({ row, col });
           }
           break;
         case CellState.Empty:
-          obstacleTiles = obstacleTiles.filter((tile) => !(tile.row === row && tile.col === col));
+          obstacleTiles = obstacleTiles.filter(
+            (tile) => !(tile.row === row && tile.col === col),
+          );
           break;
       }
 
@@ -138,7 +146,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (set)
         row.map((cell) => ({
           ...cell,
           state: CellState.Empty,
-        }))
+        })),
       ),
       startTile: null,
       endTile: null,

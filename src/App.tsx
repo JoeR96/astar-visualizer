@@ -1,5 +1,4 @@
-import React from 'react';
-import { Layout } from './Layout/Layout.tsx';
+import { Layout } from './layout/Layout.tsx';
 
 function App() {
   return <Layout />;

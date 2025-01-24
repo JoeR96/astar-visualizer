@@ -1,78 +1,134 @@
-// import useGridStore  from '../Grid/GridStore';
-// import { TileState } from '../enums/TileStates';
-//
-// type Node = {
-//     x: number;
-//     y: number;
-//     cost: number;
-//     heuristic: number;
-//     total: number;
-//     parent?: Node;
-// };
-//
-// export async function findPath(): Promise<Node[] | null> {
-//     const gridState = useGridStore.getState().getGridState();
-//     const start = useGridStore.getState().start;
-//     const end = useGridStore.getState().end;
-//
-//     if (!start || !end) return null;
-//     const startNode: Node = { x: start.row, y: start.col, cost: 0, heuristic: 0, total: 0 };
-//     const queue: Node[] = [startNode];
-//     const visitedNodes: Node[] = [];
-//     const directions: { x: number, y: number }[] = [
-//         { x: 0, y: -1 },
-//         { x: 0, y: 1 },
-//         { x: -1, y: 0 },
-//         { x: 1, y: 0 } 
-//     ];
-//
-//     while (queue.length > 0) {
-//         let currentNode = queue.shift()!;
-//
-//         if (currentNode.x === end.row && currentNode.y === end.col) {
-//             const path: Node[] = [];
-//
-//             while (currentNode) {
-//                 path.unshift(currentNode);// @ts-ignore
-//                 currentNode = currentNode.parent;
-//             }
-//
-//             for (let i = 0; i < path.length; i++) {
-//                 const node = path[i];
-//                 if (!((node.x === start.row && node.y === start.col) || (node.x === end.row && node.y === end.col))) {
-//                     const row = node.x;
-//                     const col = node.y;
-//                     await new Promise(resolve => setTimeout(resolve, 300)); // Adjust the delay time as needed
-//                     useGridStore.getState().setCell(row, col, TileState.PATH);
-//                 }
-//             }
-//
-//             return path;
-//         }
-//
-//         for (const direction of directions) {
-//             const newX = currentNode.x + direction.x;
-//             const newY = currentNode.y + direction.y;
-//
-//             if (
-//               newX >= 0 && newX < gridState.length &&
-//               newY >= 0 && newY < gridState[0].length &&
-//               gridState[newX][newY] !== TileState.OBSTACLE &&
-//               !visitedNodes.some(node => node.x === newX && node.y === newY) &&
-//               !queue.some(node => node.x === newX && node.y === newY)
-//             ) {
-//
-//                 const newNode: Node = {
-//                     x: newX, y: newY, cost: 0, heuristic: 0, total: 0, parent: currentNode
-//                 };
-//                 queue.push(newNode);
-//             }
-//         }
-//
-//         visitedNodes.push(currentNode);
-//     }
-//     return null;
-// }
-//
-//
-//
+import { aStarNode, Cell } from '../types.ts';
+import { CellState } from '../enums.ts';
+
+export const heuristic = (a: Cell, b: Cell): number => {
+  return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
+};
+
+export const initializeStartNode = (
+  start: { col: number; row: number; state: CellState },
+  end: { col: number; row: number; state: CellState },
+): aStarNode => {
+  return {
+    row: start.row,
+    col: start.col,
+    g: 0, 
+    h: heuristic(start, end), 
+    f: heuristic(start, end), 
+    parent: null,
+  };
+};
+
+export const getNeighbors = (
+  node : aStarNode,
+  grid: Cell[][]
+): { row : number; col : number; state: CellState; }[] => {
+  const neighbors = [
+    { row: node.row - 1, col: node.col },
+    { row: node.row + 1, col: node.col },
+    { row: node.row, col: node.col - 1 },
+    { row: node.row, col: node.col + 1 },
+    { row: node.row - 1, col: node.col - 1 },
+    { row: node.row - 1, col: node.col + 1 },
+    { row: node.row + 1, col: node.col - 1 },
+    { row: node.row + 1, col: node.col + 1 },
+  ];
+
+  return neighbors
+    .filter((neighbor) => {
+      return (
+        neighbor.row >= 0 &&
+        neighbor.row < grid.length &&
+        neighbor.col >= 0 &&
+        neighbor.col < grid[0].length &&
+        grid[neighbor.row][neighbor.col].state !== CellState.Obstacle
+      );
+    })
+    .map((neighbor) => ({
+      row: neighbor.row,
+      col: neighbor.col,
+      state: grid[neighbor.row][neighbor.col].state,
+    }));
+}
+
+export const calculateCosts = (
+  node: aStarNode,
+  neighbor: { col: number; row: number; state: CellState },
+  end: { col: number; row: number; state: CellState },
+): { g: number; h: number; f: number } => {
+  const g = node.g + 1; 
+  const h = heuristic(neighbor, end);
+  const f = g + h; 
+  return { g, h, f };
+};
+
+export const reconstructPath = (endNode: aStarNode): aStarNode[] => {
+  const path: aStarNode[] = [];
+  let current: aStarNode | null = endNode;
+
+  while (current) {
+    path.push(current);
+    current = current.parent;
+  }
+
+  return path.reverse();
+};
+
+export const aStar = (
+  grid: { col: number; row: number; state: CellState }[][],
+  start: FlatArray<Cell[][], 1>,
+  end: FlatArray<Cell[][], 1>,
+): { path: aStarNode[]; visitedNodes: aStarNode[] } => {
+  const openSet: aStarNode[] = [];
+  const closedSet: aStarNode[] = [];
+
+  const startNode = initializeStartNode(start, end);
+  openSet.push(startNode);
+
+  while (openSet.length > 0) {
+    openSet.sort((a, b) => a.f - b.f);
+
+    const currentNode = openSet.shift()!;
+
+    if (currentNode.row === end.row && currentNode.col === end.col) {
+      return { path: reconstructPath(currentNode), visitedNodes: closedSet };
+    }
+
+    closedSet.push(currentNode);
+
+    const neighbors = getNeighbors(currentNode, grid);
+
+    for (const neighbor of neighbors) {
+      if (closedSet.some((node) => node.row === neighbor.row && node.col === neighbor.col)) {
+        continue;
+      }
+
+      const { g, h, f } = calculateCosts(currentNode, neighbor, end);
+
+      const neighborNode = openSet.find(
+        (node) => node.row === neighbor.row && node.col === neighbor.col
+      );
+
+      if (!neighborNode || g < neighborNode.g) {
+        const newNode: aStarNode = {
+          row: neighbor.row,
+          col: neighbor.col,
+          g,
+          h,
+          f,
+          parent: currentNode,
+        };
+
+        if (!neighborNode) {
+          openSet.push(newNode);
+        } else {
+          neighborNode.g = g;
+          neighborNode.f = f;
+          neighborNode.parent = currentNode;
+        }
+      }
+    }
+  }
+
+  return { path: [], visitedNodes: closedSet };
+};

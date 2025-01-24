@@ -51,7 +51,6 @@ export const ControlPanel: React.FC = () => {
             border: 'none',
             borderRadius: '4px',
             cursor: 'pointer',
-            transition: 'background-color 0.3s ease, transform 0.2s ease',
             backgroundColor:
               activeButton === button.state ? '#4CAF50' : '#333333',
           }}
