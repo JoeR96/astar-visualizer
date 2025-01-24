@@ -1,14 +1,8 @@
-import { Fragment } from 'react';
-import './App.css';
-import { Layout } from './Layout/Layout';
+import React from 'react';
+import { Layout } from './Layout/Layout.tsx';
 
 function App() {
-  return (
-    <Fragment>
-      <h1 className="main-heading">A* Visualizer</h1>  // Corrected and added a class for styling
-      <Layout />
-    </Fragment>
-  );
+  return <Layout />;
 }
 
 export default App;
