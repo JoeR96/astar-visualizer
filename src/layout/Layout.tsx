@@ -10,19 +10,9 @@ export const Layout: React.FC = () => {
         height: '100vh', 
         width: '100vw', 
         backgroundColor: '#f0f0f0',
+        flexDirection: 'column',
       }}
     >
-      <div
-        style={{
-          width: '300px',
-          backgroundColor: '#ffffff', 
-          boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)',
-          padding: '20px',
-        }}
-      >
-        <ControlPanel />
-      </div>
-
       <div
         style={{
           flex: 1,
@@ -33,6 +23,13 @@ export const Layout: React.FC = () => {
         }}
       >
         <Grid />
+      </div>
+      <div
+        style={{
+          padding: '20px',
+        }}
+      >
+        <ControlPanel />
       </div>
     </div>
   );
