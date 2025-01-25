@@ -95,14 +95,12 @@ export const Grid: React.FC = () => {
                 {isVisited && (
                   <div style={{
                     color: 'white',
-                    fontSize: '24px',
-                    fontWeight: '800',
+                    fontWeight: 'bold',
                     textAlign: 'center',
-                    display: 'grid',
                   }}>
-                    <div style={{ gridRow: '1', gridColumn: '1' }}>h<br/>{h}</div>
-                    <div style={{ gridRow: '1', gridColumn: '3' }}>f<br/>{f}</div>
-                    <div style={{ gridRow: '2', gridColumn: '2' }}>g<br/>{g}</div>
+                    <div style={{ gridRow: '1', gridColumn: '1' }}>h{h}</div>
+                    <div style={{ gridRow: '1', gridColumn: '3' }}>f{f}</div>
+                    <div style={{ gridRow: '2', gridColumn: '2' }}>g{g}</div>
                   </div>
                 )}
               </div>
