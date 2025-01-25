@@ -1,6 +1,7 @@
 import React from 'react';
 import { useControlsBoundedStore } from '../BoundedStore.ts';
 import { CellState } from '../enums.ts';
+import { Cell } from '../types.ts';
 
 export const Grid: React.FC = () => {
   const { cells, activeButton, setCellState, setSelectedButtonState, visitedNodes, path } = useControlsBoundedStore();
@@ -56,7 +57,7 @@ export const Grid: React.FC = () => {
             const isVisited = visitedNodes.some(node => node.row === cell.row && node.col === cell.col);
             const { g, h, f } = getAStarNodeProperties(cell.row, cell.col);
 
-            let backgroundColor = getCellColor(cell.state, isVisited);
+            let backgroundColor = getCellColor(cell, isVisited);
 
             if (isPathNode) {
               const pathIndex = path.findIndex(node => node.row === cell.row && node.col === cell.col);
@@ -107,11 +108,17 @@ export const Grid: React.FC = () => {
   );
 };
 
-const getCellColor = (state: CellState | null, isVisited: boolean): string => {
+const getCellColor = (cell: Cell, isVisited: boolean): string => {
   if (isVisited) {
+    if (cell.state === CellState.Start) {
+      return '#4CAF50';
+    }
+    if (cell.state === CellState.End) {
+      return '#FFB6C1';
+    }
     return '#00BFFF';
   }
-  switch (state) {
+  switch (cell.state) {
     case CellState.Start:
       return '#4CAF50';
     case CellState.End:

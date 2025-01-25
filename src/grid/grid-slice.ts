@@ -163,7 +163,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
       visitedNodes: [],
     }));
   },
-  handleFindPath: (canTravelDiagonally : boolean) => {
+  handleFindPath: (canTravelDiagonally: boolean) => {
     set((state) => {
       const startCell = state.cells.flat().find(cell => cell.state === CellState.Start);
       const endCell = state.cells.flat().find(cell => cell.state === CellState.End);
@@ -179,26 +179,44 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
 
         const { path, visitedNodes } = aStar(gridForAStar, startCell, endCell, canTravelDiagonally);
 
-        const newCellsWithPath = state.cells.map(row =>
-          row.map(cell => ({
-            ...cell,
-            state: path.some(p => p.row === cell.row && p.col === cell.col) ? CellState.Path : cell.state
-          }))
-        );
-
-        const newCellsWithVisited = newCellsWithPath.map(row =>
-          row.map(cell => ({
-            ...cell,
-            state: visitedNodes.some(v => v.row === cell.row && v.col === cell.col) && cell.state === CellState.Empty ? CellState.Visited : cell.state
-          }))
-        );
-
-        return {
-          ...state,
-          cells: newCellsWithVisited,
-          path,
-          visitedNodes,
+        const showPathWithDelay = async (path: aStarNode[], visited: aStarNode[]) => {
+          for (let node of visited) {
+            await new Promise<void>(resolve => setTimeout(resolve, 100));
+            set((prevState) => {
+              const newCells = prevState.cells.map(row =>
+                row.map(cell => ({
+                  ...cell,
+                  state: node.row === cell.row && node.col === cell.col && cell.state === CellState.Empty ? CellState.Visited : cell.state
+                }))
+              );
+              return {
+                ...prevState,
+                cells: newCells,
+                visitedNodes: [...prevState.visitedNodes, node],
+              };
+            });
+          }
+          for (let node of path) {
+            await new Promise<void>(resolve => setTimeout(resolve, 250));
+            set((prevState) => {
+              const newCells = prevState.cells.map(row =>
+                row.map(cell => ({
+                  ...cell,
+                  state: node.row === cell.row && node.col === cell.col ? CellState.Path : cell.state
+                }))
+              );
+              return {
+                ...prevState,
+                cells: newCells,
+                path: [...prevState.path, node],
+              };
+            });
+          }
         };
+
+        showPathWithDelay(path, visitedNodes);
+ 
+        return { ...state, path: [], visitedNodes: [] };
       }
 
       return state;

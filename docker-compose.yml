@@ -1,0 +1,18 @@
+services:
+  astar-visualizer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.astar-visualizer.rule=Host(`enjoeneer.dev`) && PathPrefix(`/astar-visualizer`)"
+      - "traefik.http.routers.astar-visualizer.entrypoints=websecure"
+      - "traefik.http.services.astar-visualizer.loadbalancer.server.port=5173"
+      - "traefik.http.routers.astar-visualizer.tls=true"
+      - "traefik.http.routers.astar-visualizer.tls.certresolver=myresolver"
+    networks:
+      - traefik-network
+
+networks:
+  traefik-network:
+    external: true
