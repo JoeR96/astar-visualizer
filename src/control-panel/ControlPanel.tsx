@@ -14,6 +14,10 @@ export const ControlPanel: React.FC = () => {
     handleFindPath,
     canTravelDiagonally,
     setCanTravelDiagonally,
+    setShowHeuristicValues,
+    showHeuristicValues,
+    setShowVisited,
+    showVisited
   } = useControlsBoundedStore();
 
   const buttons = [
@@ -38,7 +42,7 @@ export const ControlPanel: React.FC = () => {
   };
 
   const handleFindPathClick = () => {
-    handleFindPath(canTravelDiagonally);
+    handleFindPath(canTravelDiagonally, showVisited);
   };
 
   return (
@@ -112,6 +116,52 @@ export const ControlPanel: React.FC = () => {
         }}
       >
         Find Path
+      </button>
+      <button
+        onClick={() => setShowVisited(!showVisited)}
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          backgroundColor: showHeuristicValues ? '#FFC107' : '#555555',
+          transition: 'background-color 0.3s ease, transform 0.2s ease',
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.backgroundColor = '#FFA000';
+          e.currentTarget.style.transform = 'scale(1.05)';
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.backgroundColor = showHeuristicValues ? '#FFC107' : '#555555';
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
+      >
+        {showVisited ? 'Hide Visited Cells' : 'Show Visited Cells'}
+      </button>
+      <button
+        onClick={() => setShowHeuristicValues(!showHeuristicValues)}
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          backgroundColor: showHeuristicValues ? '#FFC107' : '#555555',
+          transition: 'background-color 0.3s ease, transform 0.2s ease',
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.backgroundColor = '#FFA000';
+          e.currentTarget.style.transform = 'scale(1.05)';
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.backgroundColor = showHeuristicValues ? '#FFC107' : '#555555';
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
+      >
+        {showHeuristicValues ? 'Hide Heuristic Values' : 'Show Heuristic Values'}
       </button>
       <button
         onClick={() => setCanTravelDiagonally(!canTravelDiagonally)}

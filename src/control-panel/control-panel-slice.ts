@@ -6,6 +6,10 @@ export interface ControlPanelSlice {
     setSelectedButtonState: (buttonState: CellState) => void;
     canTravelDiagonally: boolean;
     setCanTravelDiagonally: (canTravelDiagonally: boolean) => void;
+    showVisited: boolean;
+    setShowVisited: (showVisited: boolean) => void;
+    showHeuristicValues: boolean;
+    setShowHeuristicValues: (showHeuristicValues: boolean) => void;
 }
 
 export const createControlPanelSlice: StateCreator<
@@ -18,5 +22,9 @@ export const createControlPanelSlice: StateCreator<
     setSelectedButtonState: (buttonState: CellState) => set({ activeButton: buttonState }),
     canTravelDiagonally: true,
     setCanTravelDiagonally: (canTravelDiagonally: boolean) => set({ canTravelDiagonally }),
+    showVisited: true,
+    setShowVisited: (showVisited: boolean) => set({ showVisited }),
+    showHeuristicValues: true,
+    setShowHeuristicValues: (showHeuristicValues: boolean) => set({ showHeuristicValues }),
 });
 

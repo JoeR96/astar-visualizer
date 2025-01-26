@@ -4,7 +4,7 @@ import { CellState } from '../enums.ts';
 import { Cell } from '../types.ts';
 
 export const Grid: React.FC = () => {
-  const { cells, activeButton, setCellState, setSelectedButtonState, visitedNodes, path } = useControlsBoundedStore();
+  const { cells, activeButton, setCellState, setSelectedButtonState, visitedNodes, path, showVisited, showHeuristicValues } = useControlsBoundedStore();
 
   const handleCellClick = (row: number, col: number) => {
     setCellState(row, col, activeButton);
@@ -57,7 +57,7 @@ export const Grid: React.FC = () => {
             const isVisited = visitedNodes.some(node => node.row === cell.row && node.col === cell.col);
             const { g, h, f } = getAStarNodeProperties(cell.row, cell.col);
 
-            let backgroundColor = getCellColor(cell, isVisited);
+            let backgroundColor = getCellColor(cell, isVisited, showVisited);
 
             if (isPathNode) {
               const pathIndex = path.findIndex(node => node.row === cell.row && node.col === cell.col);
@@ -92,15 +92,19 @@ export const Grid: React.FC = () => {
                   e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
-                {isVisited && (
+                {showVisited && isVisited && (
                   <div style={{
                     color: 'white',
                     fontWeight: 'bold',
                     textAlign: 'center',
                   }}>
+                {showHeuristicValues && (
+                  <>
                     <div style={{ gridRow: '1', gridColumn: '1' }}>h{h}</div>
                     <div style={{ gridRow: '1', gridColumn: '3' }}>f{f}</div>
                     <div style={{ gridRow: '2', gridColumn: '2' }}>g{g}</div>
+                  </>
+                )}
                   </div>
                 )}
               </div>
@@ -112,8 +116,8 @@ export const Grid: React.FC = () => {
   );
 };
 
-const getCellColor = (cell: Cell, isVisited: boolean): string => {
-  if (isVisited) {
+const getCellColor = (cell: Cell, isVisited: boolean, showVisited: boolean): string => {
+  if (isVisited && showVisited) {
     if (cell.state === CellState.Start) {
       return '#4CAF50';
     }

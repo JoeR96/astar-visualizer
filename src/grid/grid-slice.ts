@@ -20,7 +20,7 @@ export interface GridSlice {
   setNumberOfRows: (numberOfRows: number) => void;
   setCellState: (row: number, col: number, state: CellState) => void;
   resetCells: () => void;
-  handleFindPath: (canTravelDiagonally: boolean) => void;
+  handleFindPath: (canTravelDiagonally: boolean, showVisited: boolean) => void;
   path: aStarNode[];
   visitedNodes: aStarNode[];
   setPath: (path: aStarNode[]) => void;
@@ -163,7 +163,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
       visitedNodes: [],
     }));
   },
-  handleFindPath: (canTravelDiagonally: boolean) => {
+  handleFindPath: (canTravelDiagonally: boolean, showVisited: boolean) => {
     set((state) => {
       const startCell = state.cells.flat().find(cell => cell.state === CellState.Start);
       const endCell = state.cells.flat().find(cell => cell.state === CellState.End);
@@ -181,8 +181,9 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
 
         const showPathWithDelay = async (path: aStarNode[], visited: aStarNode[]) => {
           for (let node of visited) {
-            await new Promise<void>(resolve => setTimeout(resolve, 100));
-            set((prevState) => {
+            if (!showVisited){
+              await new Promise<void>(resolve => setTimeout(resolve, 1));
+            }            set((prevState) => {
               const newCells = prevState.cells.map(row =>
                 row.map(cell => ({
                   ...cell,
@@ -197,7 +198,9 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
             });
           }
           for (let node of path) {
-            await new Promise<void>(resolve => setTimeout(resolve, 250));
+            if (!showVisited){
+              await new Promise<void>(resolve => setTimeout(resolve, 1));
+            }
             set((prevState) => {
               const newCells = prevState.cells.map(row =>
                 row.map(cell => ({
