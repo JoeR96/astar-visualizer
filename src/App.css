@@ -47,6 +47,11 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  
+  /* Disable theme transitions for users who prefer reduced motion */
+  * {
+    transition: none !important;
+  }
 }
 
 /* High contrast mode support */
@@ -57,6 +62,14 @@
     --text-secondary: #000000;
     --bg-primary: #ffffff;
     --bg-secondary: #ffffff;
+  }
+  
+  [data-theme="dark"] {
+    --cell-border: #ffffff;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
   }
 }
 

@@ -125,6 +125,28 @@
   border-color: var(--warning-hover);
 }
 
+.control-button.theme-toggle {
+  background: var(--text-muted);
+  border-color: var(--text-muted);
+  color: white;
+}
+
+.control-button.theme-toggle:hover {
+  background: var(--text-secondary);
+  border-color: var(--text-secondary);
+}
+
+.control-button.theme-toggle.active {
+  background: var(--warning);
+  border-color: var(--warning);
+  color: white;
+}
+
+.control-button.theme-toggle.active:hover {
+  background: var(--warning-hover);
+  border-color: var(--warning-hover);
+}
+
 /* Size Controls */
 .size-controls {
   display: flex;

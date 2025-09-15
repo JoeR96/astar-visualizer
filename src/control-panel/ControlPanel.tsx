@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useControlsBoundedStore } from '../BoundedStore.ts';
 import { CellState } from '../enums.ts';
 import './control-panel.css';
@@ -16,6 +16,20 @@ export const ControlPanel: React.FC = () => {
     canTravelDiagonally,
     setCanTravelDiagonally,
   } = useControlsBoundedStore();
+
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    return saved ? JSON.parse(saved) : false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   const buttons = [
     { label: 'Start', state: CellState.Start },
@@ -78,6 +92,13 @@ export const ControlPanel: React.FC = () => {
               onClick={() => setCanTravelDiagonally(!canTravelDiagonally)}
             >
               {canTravelDiagonally ? 'Diagonal On' : 'Diagonal Off'}
+            </button>
+            <button
+              className={`control-button theme-toggle ${isDarkMode ? 'active' : ''}`}
+              onClick={toggleDarkMode}
+              title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {isDarkMode ? '☀️ Light' : '🌙 Dark'}
             </button>
           </div>
         </div>
