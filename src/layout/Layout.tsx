@@ -4,33 +4,18 @@ import { ControlPanel } from '../control-panel/ControlPanel.tsx';
 
 export const Layout: React.FC = () => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        height: '100vh', 
-        width: '100vw', 
-        backgroundColor: '#f0f0f0',
-        flexDirection: 'column',
-      }}
-    >
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '20px',
-        }}
-      >
+    <div className="app-container">
+      <header className="app-header">
+        <h1 className="app-title">A* Pathfinding</h1>
+      </header>
+      
+      <main className="app-main">
         <Grid />
-      </div>
-      <div
-        style={{
-          padding: '20px',
-        }}
-      >
+      </main>
+      
+      <footer className="app-footer">
         <ControlPanel />
-      </div>
+      </footer>
     </div>
   );
 };

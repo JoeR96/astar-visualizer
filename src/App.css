@@ -1,51 +1,78 @@
+/* App-specific styles */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Loading and error states */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   padding: 2rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.error h2 {
+  color: var(--danger);
+  margin-bottom: 1rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.error p {
+  color: var(--text-secondary);
+  max-width: 500px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-.card {
-  padding: 2em;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --cell-border: #000000;
+    --text-primary: #000000;
+    --text-secondary: #000000;
+    --bg-primary: #ffffff;
+    --bg-secondary: #ffffff;
+  }
 }
 
-.read-the-docs {
-  color: #888;
-}
-
-.main-heading {
-  text-align: center;    /* Centers the text */
-  font-size: 48px;       /* Large font size */
-  font-weight: bold;     /* Makes the font bold */
-  margin-top: 20px;      /* Adds some space above the heading */
-  margin-bottom: 20px;   /* Adds some space below the heading */
-  color: black;
+/* Print styles */
+@media print {
+  .app-footer {
+    display: none;
+  }
+  
+  .app-header {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .grid-container {
+    box-shadow: none !important;
+    border: 2px solid black !important;
+  }
 }

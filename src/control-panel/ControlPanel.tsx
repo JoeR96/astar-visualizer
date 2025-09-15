@@ -1,6 +1,7 @@
 import React from 'react';
 import { useControlsBoundedStore } from '../BoundedStore.ts';
 import { CellState } from '../enums.ts';
+import './control-panel.css';
 
 export const ControlPanel: React.FC = () => {
   const {
@@ -20,8 +21,8 @@ export const ControlPanel: React.FC = () => {
     { label: 'Start', state: CellState.Start },
     { label: 'End', state: CellState.End },
     { label: 'Obstacle', state: CellState.Obstacle },
-    { label: 'Remove Obstacle', state: CellState.Empty },
-    { label: 'Reset Grid', state: null },
+    { label: 'Clear', state: CellState.Empty },
+    { label: 'Reset', state: null },
   ];
 
   const handleButtonClick = (buttonState: CellState | null) => {
@@ -42,174 +43,90 @@ export const ControlPanel: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        gap: '10px',
-        padding: '20px',
-        borderRadius: '8px',
-        backgroundColor: '#2e2e2e',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-      }}
-    >
-      {buttons.map((button, index) => (
-        <button
-          key={index}
-          onClick={() => handleButtonClick(button.state)}
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            backgroundColor:
-              button.label === 'Reset Grid' ? '#FF5252' :
-                activeButton === button.state ? '#4CAF50' : '#333333',
-          }}
-          onMouseOver={(e) => {
-            if (button.label === 'Reset Grid') {
-              e.currentTarget.style.backgroundColor = '#FF0000';
-            } else if (activeButton !== button.state) {
-              e.currentTarget.style.backgroundColor = '#4CAF50';
-            }
-            e.currentTarget.style.transform = 'scale(1.05)';
-          }}
-          onMouseOut={(e) => {
-            if (button.label === 'Reset Grid') {
-              e.currentTarget.style.backgroundColor = '#FF5252';
-            } else if (activeButton !== button.state) {
-              e.currentTarget.style.backgroundColor = '#333333';
-            }
-            e.currentTarget.style.transform = 'scale(1)';
-          }}
-        >
-          {button.label}
-        </button>
-      ))}
-      <button
-        onClick={handleFindPathClick}
-        style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          backgroundColor: '#2196F3',
-          transition: 'background-color 0.3s ease, transform 0.2s ease',
-        }}
-        onMouseOver={(e) => {
-          e.currentTarget.style.backgroundColor = '#0b7dda';
-          e.currentTarget.style.transform = 'scale(1.05)';
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.style.backgroundColor = '#2196F3';
-          e.currentTarget.style.transform = 'scale(1)';
-        }}
-      >
-        Find Path
-      </button>
-      <button
-        onClick={() => setCanTravelDiagonally(!canTravelDiagonally)}
-        style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          backgroundColor: canTravelDiagonally ? '#FFC107' : '#555555',
-          transition: 'background-color 0.3s ease, transform 0.2s ease',
-        }}
-        onMouseOver={(e) => {
-          e.currentTarget.style.backgroundColor = '#FFA000';
-          e.currentTarget.style.transform = 'scale(1.05)';
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.style.backgroundColor = canTravelDiagonally ? '#FFC107' : '#555555';
-          e.currentTarget.style.transform = 'scale(1)';
-        }}
-      >
-        {canTravelDiagonally ? 'Disable Diagonal Travel' : 'Enable Diagonal Travel'}
-      </button>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button
-            onClick={() => setNumberOfRows(rows - 1)}
-            style={{
-              padding: '5px 10px',
-              fontSize: '16px',
-              borderRadius: '4px',
-              backgroundColor: '#555',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
-            -
-          </button>
-          <span style={{ color: 'white', fontSize: '16px', fontWeight: 'bold' }}>
-            Rows: {rows}
-          </span>
-          <button
-            onClick={() => setNumberOfRows(rows + 1)}
-            style={{
-              padding: '5px 10px',
-              fontSize: '16px',
-              borderRadius: '4px',
-              backgroundColor: '#555',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
-            +
-          </button>
+    <div className="control-panel">
+      <div className="control-grid">
+        {/* Tools Section */}
+        <div className="control-group tools">
+          <h3 className="group-title">Tools</h3>
+          <div className="button-group">
+            {buttons.map((button, index) => (
+              <button
+                key={index}
+                className={`control-button ${button.label.toLowerCase()} ${
+                  activeButton === button.state ? 'active' : ''
+                }`}
+                onClick={() => handleButtonClick(button.state)}
+              >
+                {button.label}
+              </button>
+            ))}
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button
-            onClick={() => setNumberOfColumns(columns - 1)}
-            style={{
-              padding: '5px 10px',
-              fontSize: '16px',
-              borderRadius: '4px',
-              backgroundColor: '#555',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
-            -
-          </button>
-          <span style={{ color: 'white', fontSize: '16px', fontWeight: 'bold' }}>
-            Columns: {columns}
-          </span>
-          <button
-            onClick={() => setNumberOfColumns(columns + 1)}
-            style={{
-              padding: '5px 10px',
-              fontSize: '16px',
-              borderRadius: '4px',
-              backgroundColor: '#555',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
-            +
-          </button>
+
+        {/* Actions Section */}
+        <div className="control-group actions">
+          <h3 className="group-title">Actions</h3>
+          <div className="button-group">
+            <button
+              className="control-button find-path"
+              onClick={handleFindPathClick}
+            >
+              Find Path
+            </button>
+            <button
+              className={`control-button diagonal ${canTravelDiagonally ? 'active' : ''}`}
+              onClick={() => setCanTravelDiagonally(!canTravelDiagonally)}
+            >
+              {canTravelDiagonally ? 'Diagonal On' : 'Diagonal Off'}
+            </button>
+          </div>
+        </div>
+
+        {/* Grid Size Section */}
+        <div className="control-group size">
+          <h3 className="group-title">Grid Size</h3>
+          <div className="size-controls">
+            <div className="size-control">
+              <label className="size-label">Rows</label>
+              <div className="size-buttons">
+                <button
+                  className="size-button"
+                  onClick={() => setNumberOfRows(Math.max(5, rows - 1))}
+                  disabled={rows <= 5}
+                >
+                  −
+                </button>
+                <span className="size-value">{rows}</span>
+                <button
+                  className="size-button"
+                  onClick={() => setNumberOfRows(Math.min(50, rows + 1))}
+                  disabled={rows >= 50}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div className="size-control">
+              <label className="size-label">Columns</label>
+              <div className="size-buttons">
+                <button
+                  className="size-button"
+                  onClick={() => setNumberOfColumns(Math.max(5, columns - 1))}
+                  disabled={columns <= 5}
+                >
+                  −
+                </button>
+                <span className="size-value">{columns}</span>
+                <button
+                  className="size-button"
+                  onClick={() => setNumberOfColumns(Math.min(50, columns + 1))}
+                  disabled={columns >= 50}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

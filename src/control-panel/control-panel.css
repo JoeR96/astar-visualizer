@@ -1,0 +1,326 @@
+/* Control Panel Styles */
+.control-panel {
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.group-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  min-width: fit-content;
+}
+
+.control-button:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-tertiary);
+}
+
+.control-button:active {
+  transform: translateY(1px);
+}
+
+.control-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Button variants */
+.control-button.start.active {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.control-button.end.active {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+.control-button.obstacle.active {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: white;
+}
+
+.control-button.clear.active {
+  background: var(--text-muted);
+  border-color: var(--text-muted);
+  color: white;
+}
+
+.control-button.reset {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+.control-button.reset:hover {
+  background: var(--danger-hover);
+  border-color: var(--danger-hover);
+}
+
+.control-button.find-path {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.control-button.find-path:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.control-button.diagonal.active {
+  background: var(--warning);
+  border-color: var(--warning);
+  color: white;
+}
+
+.control-button.diagonal:hover {
+  background: var(--warning-hover);
+  border-color: var(--warning-hover);
+}
+
+/* Size Controls */
+.size-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.size-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.size-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.size-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.size-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.size-button:hover:not(:disabled) {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.size-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.size-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.size-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.size-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 1.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+/* Responsive Grid Layout */
+@media (min-width: 1024px) {
+  .control-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  .control-group.tools {
+    grid-column: 1;
+  }
+  
+  .control-group.actions {
+    grid-column: 2;
+  }
+  
+  .control-group.size {
+    grid-column: 3;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .control-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .control-group.tools {
+    grid-column: 1 / -1;
+  }
+  
+  .control-group.actions {
+    grid-column: 1;
+  }
+  
+  .control-group.size {
+    grid-column: 2;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .control-panel {
+    padding: 0.75rem;
+  }
+  
+  .control-grid {
+    gap: 1rem;
+  }
+  
+  .button-group {
+    gap: 0.375rem;
+  }
+  
+  .control-button {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+  
+  .size-controls {
+    gap: 0.5rem;
+  }
+  
+  .size-buttons {
+    gap: 0.375rem;
+  }
+  
+  .size-button {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .size-value {
+    min-width: 2rem;
+    height: 1.5rem;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .control-panel {
+    padding: 0.5rem;
+  }
+  
+  .control-grid {
+    gap: 0.75rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .control-button {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .size-controls {
+    gap: 0.375rem;
+  }
+  
+  .size-buttons {
+    gap: 0.25rem;
+  }
+  
+  .size-button {
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.75rem;
+  }
+  
+  .size-value {
+    min-width: 1.75rem;
+    height: 1.25rem;
+    font-size: 0.75rem;
+  }
+}

@@ -1,5 +1,134 @@
-.grid {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Grid Styles */
+.grid-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.grid-container {
+  display: grid;
+  gap: 1px;
+  padding: 8px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+.grid-cell {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--cell-border);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-radius: 2px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.grid-cell:hover {
+  transform: scale(1.02);
+}
+
+.grid-cell:active {
+  transform: scale(0.98);
+}
+
+/* Cell Values Display */
+.cell-values {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+.value-h {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+}
+
+.value-f {
+  grid-column: 3;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+}
+
+.value-g {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+}
+
+/* Cell Indicators */
+.cell-indicator {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.cell-indicator.start {
+  color: white;
+}
+
+.cell-indicator.end {
+  color: white;
+}
+
+.cell-indicator.obstacle {
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cell-values {
+    font-size: 0.6rem;
+  }
+  
+  .value-h, .value-f, .value-g {
+    font-size: 0.5rem;
+  }
+  
+  .cell-indicator {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cell-values {
+    font-size: 0.5rem;
+  }
+  
+  .value-h, .value-f, .value-g {
+    font-size: 0.4rem;
+  }
+  
+  .cell-indicator {
+    font-size: 0.9rem;
+  }
 }
