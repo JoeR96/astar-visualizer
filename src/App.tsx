@@ -1,7 +1,11 @@
 import { Layout } from './layout/Layout.tsx';
 
-function App() {
-  return <Layout />;
+export interface AStarVisualizerProps {
+  defaultDarkMode?: boolean;
+}
+
+function App({ defaultDarkMode }: AStarVisualizerProps) {
+  return <Layout defaultDarkMode={defaultDarkMode} />;
 }
 
 export default App;

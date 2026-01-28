@@ -6,15 +6,20 @@ import './grid.css';
 
 export const Grid: React.FC = () => {
   const { cells, activeButton, setCellState, setSelectedButtonState, visitedNodes, path } = useControlsBoundedStore();
-  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    const updateSize = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setContainerSize({ width: rect.width, height: rect.height });
+      }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
   }, []);
 
   const handleCellClick = (row: number, col: number) => {
@@ -40,42 +45,34 @@ export const Grid: React.FC = () => {
     return { g: null, h: null, f: null };
   };
 
-  // Calculate responsive cell size for perfect squares - much larger grid
+  // Calculate responsive cell size based on available container space
   const getCellSize = () => {
-    const isMobile = windowSize.width < 768;
-    const isTablet = windowSize.width < 1024;
-    
-    // Much larger available space for the grid
-    const maxWidth = isMobile 
-      ? Math.min(windowSize.width * 0.98, 500)
-      : isTablet 
-        ? Math.min(windowSize.width * 0.95, 800)
-        : Math.min(windowSize.width * 0.9, 1000);
-        
-    const maxHeight = isMobile
-      ? Math.min(windowSize.height * 0.75, 500)
-      : isTablet
-        ? Math.min(windowSize.height * 0.8, 700)
-        : Math.min(windowSize.height * 0.85, 800);
+    if (!containerSize.width || !containerSize.height) return 20;
     
     const cols = cells[0]?.length || 1;
     const rows = cells.length || 1;
     
-    const padding = isMobile ? 16 : 24;
-    const cellSizeByWidth = (maxWidth - padding) / cols;
-    const cellSizeByHeight = (maxHeight - padding) / rows;
+    // Account for padding and gaps
+    const padding = 20;
+    const gap = cols + rows; // Total gap space
     
-    // Much larger minimum and maximum cell sizes for better visibility
-    const minSize = isMobile ? 30 : 40;
-    const maxSize = isMobile ? 50 : isTablet ? 70 : 90;
+    const availableWidth = containerSize.width - padding - gap;
+    const availableHeight = containerSize.height - padding - gap;
     
-    return Math.max(minSize, Math.min(cellSizeByWidth, cellSizeByHeight, maxSize));
+    const cellSizeByWidth = availableWidth / cols;
+    const cellSizeByHeight = availableHeight / rows;
+    
+    // Use the smaller dimension to ensure everything fits
+    const size = Math.min(cellSizeByWidth, cellSizeByHeight);
+    
+    // Clamp between reasonable min/max
+    return Math.max(15, Math.min(size, 60));
   };
 
   const cellSize = getCellSize();
 
   return (
-    <div className="grid-wrapper">
+    <div className="grid-wrapper" ref={containerRef}>
       <div 
         className="grid-container"
         style={{

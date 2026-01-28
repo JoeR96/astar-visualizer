@@ -39,8 +39,8 @@
   -webkit-text-size-adjust: 100%;
 }
 
-/* Dark theme */
-[data-theme="dark"] {
+/* Dark theme - scoped to component */
+.astar-visualizer-root[data-theme="dark"] {
   --bg-primary: #0f0f0f;
   --bg-secondary: #1a1a1a;
   --bg-tertiary: #2a2a2a;
@@ -70,66 +70,82 @@
   --warning-hover: #f57c00;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* Only apply global resets when used as standalone app, not as embedded component */
 
-/* Smooth transitions for theme switching */
-*,
-*::before,
-*::after {
+/* Smooth transitions for theme switching - scoped to component */
+.astar-visualizer-root,
+.astar-visualizer-root *,
+.astar-visualizer-root *::before,
+.astar-visualizer-root *::after {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-body {
+/* Component container styling */
+.astar-visualizer-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  overflow: hidden;
   background: var(--bg-primary);
   color: var(--text-primary);
-  overflow-x: hidden;
+  position: relative;
+}
+
+/* Scoped box-sizing */
+.astar-visualizer-root * {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
 /* App Layout */
-.app-container {
+.astar-visualizer-root .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
 }
 
-.app-header {
-  padding: 1rem 2rem;
+.astar-visualizer-root .app-header {
+  padding: 0.5rem 1rem;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
   text-align: center;
+  flex-shrink: 0;
 }
 
-.app-title {
-  font-size: 1.75rem;
+.astar-visualizer-root .app-title {
+  font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
   color: var(--text-primary);
   letter-spacing: -0.025em;
 }
 
-.app-main {
+.astar-visualizer-root .app-main {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
+  overflow: hidden;
   min-height: 0;
 }
 
-.app-footer {
-  padding: 1rem 2rem;
+.astar-visualizer-root .app-footer {
+  padding: 0.5rem 1rem;
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+  overflow-y: auto;
+  max-height: 30%;
 }
 
 /* Button Styles */
-button {
+.astar-visualizer-root button {
   border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 0.5rem 1rem;
@@ -143,53 +159,81 @@ button {
   outline: none;
 }
 
-button:hover {
+.astar-visualizer-root button:hover {
   border-color: var(--border-hover);
   background: var(--bg-tertiary);
 }
 
-button:active {
+.astar-visualizer-root button:active {
   transform: translateY(1px);
 }
 
-button:focus-visible {
+.astar-visualizer-root button:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
-/* Responsive Design */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .app-header {
+  .astar-visualizer-root .app-header {
     padding: 0.75rem 1.5rem;
   }
   
-  .app-title {
+  .astar-visualizer-root .app-title {
     font-size: 1.5rem;
   }
   
-  .app-main {
+  .astar-visualizer-root .app-main {
     padding: 0.25rem;
   }
   
-  .app-footer {
+  .astar-visualizer-root .app-footer {
     padding: 0.75rem 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .app-header {
+  .astar-visualizer-root .app-header {
     padding: 0.5rem 1rem;
   }
   
-  .app-title {
+  .astar-visualizer-root .app-title {
     font-size: 1.25rem;
   }
   
-  .app-main {
+  .astar-visualizer-root .app-main {
     padding: 0.125rem;
   }
   
-  .app-footer {
+  .astar-visualizer-root .app-footer {
     padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-height: 600px) {
+  .astar-visualizer-root .app-header {
+    padding: 0.5rem 1rem;
+  }
+  
+  .astar-visualizer-root .app-title {
+    font-size: 1.25rem;
+  }
+  
+  .astar-visualizer-root .app-footer {
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-height: 400px) {
+  .astar-visualizer-root .app-header {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .astar-visualizer-root .app-title {
+    font-size: 1rem;
+  }
+  
+  .astar-visualizer-root .app-footer {
+    padding: 0.25rem 0.5rem;
   }
 }
