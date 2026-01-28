@@ -1,6 +1,15 @@
 import React from 'react';
 import { useControlsBoundedStore } from '../BoundedStore.ts';
-import { CellState } from '../enums.ts';
+import { CellState, VisualTheme } from '../enums.ts';
+import { getTheme, getTerrainTools, THEMES } from '../themes/index.ts';
+import {
+  generateRiver,
+  generateMountainRange,
+  generateMaze,
+  generateRandomScatter,
+  generateClassicRandom,
+  generateClassicMaze,
+} from '../themes/presets.ts';
 import './control-panel.css';
 
 export interface ControlPanelProps {
@@ -20,7 +29,15 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ isDarkMode, setIsDar
     handleFindPath,
     canTravelDiagonally,
     setCanTravelDiagonally,
+    visualTheme,
+    setVisualTheme,
+    showCosts,
+    setShowCosts,
+    setCellState,
   } = useControlsBoundedStore();
+
+  const theme = getTheme(visualTheme);
+  const terrainTools = getTerrainTools(visualTheme);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -51,9 +68,87 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ isDarkMode, setIsDar
     handleFindPath(canTravelDiagonally);
   };
 
+  const handlePresetGenerate = (presetId: string) => {
+    // First reset the grid
+    resetCells();
+
+    let placements;
+    if (visualTheme === VisualTheme.Medieval) {
+      switch (presetId) {
+        case 'river':
+          placements = generateRiver(rows, columns);
+          break;
+        case 'mountains':
+          placements = generateMountainRange(rows, columns);
+          break;
+        case 'maze':
+          placements = generateMaze(rows, columns);
+          break;
+        case 'random':
+          placements = generateRandomScatter(rows, columns);
+          break;
+        default:
+          return;
+      }
+    } else {
+      switch (presetId) {
+        case 'random':
+          placements = generateClassicRandom(rows, columns);
+          break;
+        case 'maze':
+          placements = generateClassicMaze(rows, columns);
+          break;
+        default:
+          return;
+      }
+    }
+
+    // Apply terrain placements
+    for (const placement of placements) {
+      setCellState(placement.row, placement.col, placement.state);
+    }
+
+    // Set default start and end positions
+    setCellState(0, 0, CellState.Start);
+    setCellState(rows - 1, columns - 1, CellState.End);
+    setSelectedButtonState(CellState.Obstacle);
+  };
+
   return (
     <div className="control-panel">
       <div className="control-grid">
+        {/* Theme & Visual Section */}
+        <div className="control-group theme-section">
+          <h3 className="group-title">Theme</h3>
+          <div className="button-group">
+            <select
+              className="theme-select"
+              value={visualTheme}
+              onChange={(e) => setVisualTheme(e.target.value as VisualTheme)}
+            >
+              {Object.values(THEMES).map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+            <button
+              className={`control-button theme-toggle ${isDarkMode ? 'active' : ''}`}
+              onClick={toggleDarkMode}
+              title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {isDarkMode ? '☀️ Light' : '🌙 Dark'}
+            </button>
+            <button
+              className={`control-button show-costs ${showCosts ? 'active' : ''}`}
+              onClick={() => setShowCosts(!showCosts)}
+              title={showCosts ? 'Hide costs' : 'Show costs'}
+            >
+              {showCosts ? '📊 Costs On' : '📊 Costs Off'}
+            </button>
+          </div>
+        </div>
+
         {/* Tools Section */}
         <div className="control-group tools">
           <h3 className="group-title">Tools</h3>
@@ -67,6 +162,45 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ isDarkMode, setIsDar
                 onClick={() => handleButtonClick(button.state)}
               >
                 {button.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Terrain Tools (theme-specific) */}
+        {visualTheme === VisualTheme.Medieval && (
+          <div className="control-group terrain">
+            <h3 className="group-title">Terrain</h3>
+            <div className="button-group">
+              {terrainTools
+                .filter(({ state }) => state !== CellState.Obstacle)
+                .map(({ state, config }) => (
+                  <button
+                    key={state}
+                    className={`control-button terrain-btn ${config.name.toLowerCase()} ${
+                      activeButton === state ? 'active' : ''
+                    }`}
+                    onClick={() => setSelectedButtonState(state)}
+                    title={config.passable ? 'Passable terrain' : 'Impassable terrain'}
+                  >
+                    {config.icon} {config.name}
+                  </button>
+                ))}
+            </div>
+          </div>
+        )}
+
+        {/* Presets Section */}
+        <div className="control-group presets">
+          <h3 className="group-title">Generate Map</h3>
+          <div className="button-group">
+            {theme.presets.map((preset) => (
+              <button
+                key={preset.id}
+                className="control-button preset-btn"
+                onClick={() => handlePresetGenerate(preset.id)}
+              >
+                {preset.icon} {preset.name}
               </button>
             ))}
           </div>
@@ -87,13 +221,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ isDarkMode, setIsDar
               onClick={() => setCanTravelDiagonally(!canTravelDiagonally)}
             >
               {canTravelDiagonally ? 'Diagonal On' : 'Diagonal Off'}
-            </button>
-            <button
-              className={`control-button theme-toggle ${isDarkMode ? 'active' : ''}`}
-              onClick={toggleDarkMode}
-              title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              {isDarkMode ? '☀️ Light' : '🌙 Dark'}
             </button>
           </div>
         </div>

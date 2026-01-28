@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Grid } from '../grid/Grid.tsx';
 import { ControlPanel } from '../control-panel/ControlPanel.tsx';
+import { useControlsBoundedStore } from '../BoundedStore.ts';
 
 export interface LayoutProps {
   defaultDarkMode?: boolean;
@@ -8,6 +9,7 @@ export interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ defaultDarkMode }) => {
   const rootRef = useRef<HTMLDivElement>(null);
+  const { visualTheme } = useControlsBoundedStore();
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (defaultDarkMode !== undefined) {
       return defaultDarkMode;
@@ -22,11 +24,12 @@ export const Layout: React.FC<LayoutProps> = ({ defaultDarkMode }) => {
     }
     if (rootRef.current) {
       rootRef.current.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+      rootRef.current.setAttribute('data-visual-theme', visualTheme);
     }
-  }, [isDarkMode, defaultDarkMode]);
+  }, [isDarkMode, defaultDarkMode, visualTheme]);
 
   return (
-    <div ref={rootRef} className="astar-visualizer-root" data-theme={isDarkMode ? 'dark' : 'light'}>
+    <div ref={rootRef} className="astar-visualizer-root" data-theme={isDarkMode ? 'dark' : 'light'} data-visual-theme={visualTheme}>
       <div className="app-container">
         <header className="app-header">
           <h1 className="app-title">A* Pathfinding</h1>

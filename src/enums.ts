@@ -5,4 +5,12 @@ export enum CellState {
   Obstacle,
   Visited,
   Path,
+  Water,
+  Forest,
+  Mountain,
+}
+
+export enum VisualTheme {
+  Classic = 'classic',
+  Medieval = 'medieval',
 }

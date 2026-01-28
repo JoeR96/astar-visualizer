@@ -13,7 +13,7 @@
   --border-color: #e0e0e0;
   --border-hover: #d0d0d0;
   
-  /* Grid colors */
+  /* Grid colors - Classic theme */
   --cell-empty: #ffffff;
   --cell-start: #4caf50;
   --cell-end: #f44336;
@@ -21,6 +21,9 @@
   --cell-visited: #2196f3;
   --cell-path: #ff9800;
   --cell-border: #e0e0e0;
+  --cell-water: #4A90D9;
+  --cell-forest: #228B22;
+  --cell-mountain: #8B7355;
   
   /* Interactive colors */
   --primary: #2196f3;
@@ -50,7 +53,7 @@
   --border-color: #404040;
   --border-hover: #505050;
   
-  /* Grid colors for dark mode */
+  /* Grid colors for dark mode - Classic theme */
   --cell-empty: #2a2a2a;
   --cell-start: #4caf50;
   --cell-end: #f44336;
@@ -58,6 +61,9 @@
   --cell-visited: #2196f3;
   --cell-path: #ff9800;
   --cell-border: #404040;
+  --cell-water: #1E5A8F;
+  --cell-forest: #1B5E20;
+  --cell-mountain: #5D4E37;
   
   /* Interactive colors for dark mode */
   --primary: #2196f3;
@@ -68,6 +74,34 @@
   --danger-hover: #d32f2f;
   --warning: #ff9800;
   --warning-hover: #f57c00;
+}
+
+/* Medieval theme - Light mode */
+.astar-visualizer-root[data-visual-theme="medieval"] {
+  --cell-empty: #90EE90;
+  --cell-start: #4caf50;
+  --cell-end: #8B0000;
+  --cell-obstacle: #696969;
+  --cell-visited: #87CEEB;
+  --cell-path: #FFD700;
+  --cell-border: #556B2F;
+  --cell-water: #4A90D9;
+  --cell-forest: #228B22;
+  --cell-mountain: #8B7355;
+}
+
+/* Medieval theme - Dark mode */
+.astar-visualizer-root[data-visual-theme="medieval"][data-theme="dark"] {
+  --cell-empty: #2D5A2D;
+  --cell-start: #2E7D32;
+  --cell-end: #5C0000;
+  --cell-obstacle: #3D3D3D;
+  --cell-visited: #4682B4;
+  --cell-path: #B8860B;
+  --cell-border: #3B4A29;
+  --cell-water: #1E3A5F;
+  --cell-forest: #1B4D1B;
+  --cell-mountain: #4A3728;
 }
 
 /* Only apply global resets when used as standalone app, not as embedded component */

@@ -42,6 +42,8 @@ export const getNeighbors = (
     );
   }
 
+  const impassableStates = [CellState.Obstacle, CellState.Water, CellState.Mountain];
+
   return neighbors
     .filter((neighbor) => {
       return (
@@ -49,7 +51,7 @@ export const getNeighbors = (
         neighbor.row < grid.length &&
         neighbor.col >= 0 &&
         neighbor.col < grid[0].length &&
-        grid[neighbor.row][neighbor.col].state !== CellState.Obstacle
+        !impassableStates.includes(grid[neighbor.row][neighbor.col].state)
       );
     })
     .map((neighbor) => ({

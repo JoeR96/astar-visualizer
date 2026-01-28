@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useControlsBoundedStore } from '../BoundedStore.ts';
 import { CellState } from '../enums.ts';
 import { Cell } from '../types.ts';
+import { getTheme } from '../themes/index.ts';
 import './grid.css';
 
 export const Grid: React.FC = () => {
-  const { cells, activeButton, setCellState, setSelectedButtonState, visitedNodes, path } = useControlsBoundedStore();
+  const { cells, activeButton, setCellState, setSelectedButtonState, visitedNodes, path, visualTheme, showCosts } = useControlsBoundedStore();
+  const theme = getTheme(visualTheme);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -137,23 +139,32 @@ export const Grid: React.FC = () => {
                   }
                 }}
               >
-                {isVisited && (
+                {isVisited && showCosts && (
                   <div className="cell-values">
                     <div className="value-h">h{h}</div>
                     <div className="value-f">f{f}</div>
                     <div className="value-g">g{g}</div>
                   </div>
                 )}
-                
-                {/* Minimalistic cell indicators */}
+
+                {/* Theme-based cell indicators */}
                 {cell.state === CellState.Start && (
-                  <div className="cell-indicator start">●</div>
+                  <div className="cell-indicator start">{theme.startIcon}</div>
                 )}
                 {cell.state === CellState.End && (
-                  <div className="cell-indicator end">●</div>
+                  <div className="cell-indicator end">{theme.endIcon}</div>
                 )}
                 {cell.state === CellState.Obstacle && (
-                  <div className="cell-indicator obstacle">■</div>
+                  <div className="cell-indicator obstacle">{theme.terrains[CellState.Obstacle]?.icon || '■'}</div>
+                )}
+                {cell.state === CellState.Water && (
+                  <div className="cell-indicator water">{theme.terrains[CellState.Water]?.icon || '🌊'}</div>
+                )}
+                {cell.state === CellState.Forest && (
+                  <div className="cell-indicator forest">{theme.terrains[CellState.Forest]?.icon || '🌲'}</div>
+                )}
+                {cell.state === CellState.Mountain && (
+                  <div className="cell-indicator mountain">{theme.terrains[CellState.Mountain]?.icon || '⛰️'}</div>
                 )}
               </div>
             );
@@ -181,6 +192,12 @@ const getCellColor = (cell: Cell, isVisited: boolean): string => {
       return 'var(--cell-end)';
     case CellState.Obstacle:
       return 'var(--cell-obstacle)';
+    case CellState.Water:
+      return 'var(--cell-water)';
+    case CellState.Forest:
+      return 'var(--cell-forest)';
+    case CellState.Mountain:
+      return 'var(--cell-mountain)';
     case CellState.Empty:
       return 'var(--cell-empty)';
     default:

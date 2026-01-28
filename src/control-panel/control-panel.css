@@ -147,6 +147,91 @@
   border-color: var(--warning-hover);
 }
 
+/* Theme Select Dropdown */
+.astar-visualizer-root .theme-select {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  min-width: 120px;
+}
+
+.astar-visualizer-root .theme-select:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-tertiary);
+}
+
+.astar-visualizer-root .theme-select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Show Costs Button */
+.astar-visualizer-root .control-button.show-costs {
+  background: var(--text-muted);
+  border-color: var(--text-muted);
+  color: white;
+}
+
+.astar-visualizer-root .control-button.show-costs:hover {
+  background: var(--text-secondary);
+  border-color: var(--text-secondary);
+}
+
+.astar-visualizer-root .control-button.show-costs.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* Terrain Buttons */
+.astar-visualizer-root .control-button.terrain-btn {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.astar-visualizer-root .control-button.terrain-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-hover);
+}
+
+.astar-visualizer-root .control-button.terrain-btn.water.active {
+  background: #4A90D9;
+  border-color: #4A90D9;
+  color: white;
+}
+
+.astar-visualizer-root .control-button.terrain-btn.forest.active {
+  background: #228B22;
+  border-color: #228B22;
+  color: white;
+}
+
+.astar-visualizer-root .control-button.terrain-btn.mountain.active {
+  background: #8B7355;
+  border-color: #8B7355;
+  color: white;
+}
+
+/* Preset Buttons */
+.astar-visualizer-root .control-button.preset-btn {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+.astar-visualizer-root .control-button.preset-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
 /* Size Controls */
 .astar-visualizer-root .size-controls {
   display: flex;
