@@ -1,7 +1,7 @@
 {
   "name": "astar-visualizer",
   "private": false,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "description": "A React component for visualizing A* pathfinding algorithm",
   "main": "./dist/astar-visualizer.umd.cjs",
