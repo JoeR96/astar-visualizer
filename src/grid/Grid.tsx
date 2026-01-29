@@ -147,24 +147,23 @@ export const Grid: React.FC = () => {
                   </div>
                 )}
 
-                {/* Theme-based cell indicators */}
                 {cell.state === CellState.Start && (
-                  <div className="cell-indicator start">{theme.startIcon}</div>
+                  <div className="cell-indicator start" style={{ fontSize: cellSize * 0.7 }}>{theme.startIcon}</div>
                 )}
                 {cell.state === CellState.End && (
-                  <div className="cell-indicator end">{theme.endIcon}</div>
+                  <div className="cell-indicator end" style={{ fontSize: cellSize * 0.7 }}>{theme.endIcon}</div>
                 )}
                 {cell.state === CellState.Obstacle && (
-                  <div className="cell-indicator obstacle">{theme.terrains[CellState.Obstacle]?.icon || '■'}</div>
+                  <div className="cell-indicator obstacle" style={{ fontSize: cellSize * 0.7 }}>{theme.terrains[CellState.Obstacle]?.icon || '■'}</div>
                 )}
                 {cell.state === CellState.Water && (
-                  <div className="cell-indicator water">{theme.terrains[CellState.Water]?.icon || '🌊'}</div>
+                  <div className="cell-indicator water" style={{ fontSize: cellSize * 0.7 }}>{theme.terrains[CellState.Water]?.icon || '🌊'}</div>
                 )}
                 {cell.state === CellState.Forest && (
-                  <div className="cell-indicator forest">{theme.terrains[CellState.Forest]?.icon || '🌲'}</div>
+                  <div className="cell-indicator forest" style={{ fontSize: cellSize * 0.7 }}>{theme.terrains[CellState.Forest]?.icon || '🌲'}</div>
                 )}
                 {cell.state === CellState.Mountain && (
-                  <div className="cell-indicator mountain">{theme.terrains[CellState.Mountain]?.icon || '⛰️'}</div>
+                  <div className="cell-indicator mountain" style={{ fontSize: cellSize * 0.7 }}>{theme.terrains[CellState.Mountain]?.icon || '⛰️'}</div>
                 )}
               </div>
             );

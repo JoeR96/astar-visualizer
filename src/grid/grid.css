@@ -91,7 +91,6 @@
 
 /* Cell Indicators */
 .astar-visualizer-root .cell-indicator {
-  font-size: 1.2rem;
   font-weight: bold;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
@@ -114,13 +113,9 @@
   .astar-visualizer-root .cell-values {
     font-size: 0.6rem;
   }
-  
+
   .astar-visualizer-root .value-h, .astar-visualizer-root .value-f, .astar-visualizer-root .value-g {
     font-size: 0.5rem;
-  }
-  
-  .astar-visualizer-root .cell-indicator {
-    font-size: 1rem;
   }
 }
 
@@ -128,12 +123,8 @@
   .astar-visualizer-root .cell-values {
     font-size: 0.5rem;
   }
-  
+
   .astar-visualizer-root .value-h, .astar-visualizer-root .value-f, .astar-visualizer-root .value-g {
     font-size: 0.4rem;
-  }
-  
-  .astar-visualizer-root .cell-indicator {
-    font-size: 0.9rem;
   }
 }
