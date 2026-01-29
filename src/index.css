@@ -1,39 +1,49 @@
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  
+
+  /* Apple-inspired color palette */
+  --apple-blue: #0071e3;
+  --apple-blue-hover: #0077ed;
+  --apple-green: #34c759;
+  --apple-green-hover: #30d158;
+  --apple-red: #ff3b30;
+  --apple-red-hover: #ff453a;
+  --apple-orange: #ff9500;
+  --apple-orange-hover: #ff9f0a;
+
   /* Light theme colors */
-  --bg-primary: #fafafa;
+  --bg-primary: #f5f5f7;
   --bg-secondary: #ffffff;
-  --bg-tertiary: #f5f5f5;
-  --text-primary: #1a1a1a;
-  --text-secondary: #666666;
-  --text-muted: #999999;
-  --border-color: #e0e0e0;
-  --border-hover: #d0d0d0;
-  
+  --bg-tertiary: #e8e8ed;
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-muted: #86868b;
+  --border-color: #d2d2d7;
+  --border-hover: #c7c7cc;
+
   /* Grid colors - Classic theme */
   --cell-empty: #ffffff;
-  --cell-start: #4caf50;
-  --cell-end: #f44336;
-  --cell-obstacle: #424242;
-  --cell-visited: #2196f3;
-  --cell-path: #ff9800;
-  --cell-border: #e0e0e0;
-  --cell-water: #4A90D9;
-  --cell-forest: #228B22;
-  --cell-mountain: #8B7355;
-  
-  /* Interactive colors */
-  --primary: #2196f3;
-  --primary-hover: #1976d2;
-  --success: #4caf50;
-  --success-hover: #388e3c;
-  --danger: #f44336;
-  --danger-hover: #d32f2f;
-  --warning: #ff9800;
-  --warning-hover: #f57c00;
+  --cell-start: var(--apple-green);
+  --cell-end: var(--apple-red);
+  --cell-obstacle: #3a3a3c;
+  --cell-visited: var(--apple-blue);
+  --cell-path: var(--apple-orange);
+  --cell-border: #d2d2d7;
+  --cell-water: #5ac8fa;
+  --cell-forest: #34c759;
+  --cell-mountain: #8e8e93;
+
+  /* Interactive colors - mapped to Apple palette */
+  --primary: var(--apple-blue);
+  --primary-hover: var(--apple-blue-hover);
+  --success: var(--apple-green);
+  --success-hover: var(--apple-green-hover);
+  --danger: var(--apple-red);
+  --danger-hover: var(--apple-red-hover);
+  --warning: var(--apple-orange);
+  --warning-hover: var(--apple-orange-hover);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -44,36 +54,36 @@
 
 /* Dark theme - scoped to component */
 .astar-visualizer-root[data-theme="dark"] {
-  --bg-primary: #0f0f0f;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #2a2a2a;
+  --bg-primary: #000000;
+  --bg-secondary: #1c1c1e;
+  --bg-tertiary: #2c2c2e;
   --text-primary: #ffffff;
-  --text-secondary: #b3b3b3;
-  --text-muted: #808080;
-  --border-color: #404040;
-  --border-hover: #505050;
-  
+  --text-secondary: #98989d;
+  --text-muted: #636366;
+  --border-color: #38383a;
+  --border-hover: #48484a;
+
   /* Grid colors for dark mode - Classic theme */
-  --cell-empty: #2a2a2a;
-  --cell-start: #4caf50;
-  --cell-end: #f44336;
-  --cell-obstacle: #1a1a1a;
-  --cell-visited: #2196f3;
-  --cell-path: #ff9800;
-  --cell-border: #404040;
-  --cell-water: #1E5A8F;
-  --cell-forest: #1B5E20;
-  --cell-mountain: #5D4E37;
-  
-  /* Interactive colors for dark mode */
-  --primary: #2196f3;
-  --primary-hover: #1976d2;
-  --success: #4caf50;
-  --success-hover: #388e3c;
-  --danger: #f44336;
-  --danger-hover: #d32f2f;
-  --warning: #ff9800;
-  --warning-hover: #f57c00;
+  --cell-empty: #2c2c2e;
+  --cell-start: #30d158;
+  --cell-end: #ff453a;
+  --cell-obstacle: #1c1c1e;
+  --cell-visited: #0a84ff;
+  --cell-path: #ff9f0a;
+  --cell-border: #38383a;
+  --cell-water: #64d2ff;
+  --cell-forest: #30d158;
+  --cell-mountain: #636366;
+
+  /* Interactive colors for dark mode - brighter variants */
+  --primary: #0a84ff;
+  --primary-hover: #409cff;
+  --success: #30d158;
+  --success-hover: #34c759;
+  --danger: #ff453a;
+  --danger-hover: #ff6961;
+  --warning: #ff9f0a;
+  --warning-hover: #ffb340;
 }
 
 /* Medieval theme - Light mode */
@@ -144,7 +154,7 @@
 }
 
 .astar-visualizer-root .app-header {
-  padding: 0.5rem 1rem;
+  padding: 1rem 1.5rem;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
   text-align: center;
@@ -169,20 +179,13 @@
   min-height: 0;
 }
 
-.astar-visualizer-root .app-footer {
-  padding: 0.5rem 1rem;
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border-color);
-  flex-shrink: 0;
-  overflow-y: auto;
-  max-height: 30%;
-}
+/* Footer removed - now using Toolbar + SettingsPanel */
 
 /* Button Styles */
 .astar-visualizer-root button {
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.625rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 500;
   font-family: inherit;

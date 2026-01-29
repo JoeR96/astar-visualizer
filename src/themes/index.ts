@@ -30,8 +30,8 @@ export const CLASSIC_THEME: ThemeConfig = {
     [CellState.Obstacle]: { name: 'Wall', icon: '■', passable: false },
   },
   presets: [
-    { id: 'random', name: 'Random', icon: '🎲' },
-    { id: 'maze', name: 'Maze', icon: '🔲' },
+    { id: 'random', name: 'Random', icon: '' },
+    { id: 'maze', name: 'Maze', icon: '' },
   ],
 };
 
@@ -47,10 +47,10 @@ export const MEDIEVAL_THEME: ThemeConfig = {
     [CellState.Mountain]: { name: 'Mountain', icon: '⛰️', passable: false },
   },
   presets: [
-    { id: 'river', name: 'River Crossing', icon: '🌊' },
-    { id: 'mountains', name: 'Mountain Range', icon: '⛰️' },
-    { id: 'maze', name: 'Castle Maze', icon: '🏰' },
-    { id: 'random', name: 'Random Forest', icon: '🎲' },
+    { id: 'river', name: 'River Crossing', icon: '' },
+    { id: 'mountains', name: 'Mountain Range', icon: '' },
+    { id: 'maze', name: 'Castle Maze', icon: '' },
+    { id: 'random', name: 'Random Forest', icon: '' },
   ],
 };
 

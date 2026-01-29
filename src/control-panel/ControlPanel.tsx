@@ -137,14 +137,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ isDarkMode, setIsDar
               onClick={toggleDarkMode}
               title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
-              {isDarkMode ? '☀️ Light' : '🌙 Dark'}
+              {isDarkMode ? 'Light' : 'Dark'}
             </button>
             <button
               className={`control-button show-costs ${showCosts ? 'active' : ''}`}
               onClick={() => setShowCosts(!showCosts)}
               title={showCosts ? 'Hide costs' : 'Show costs'}
             >
-              {showCosts ? '📊 Costs On' : '📊 Costs Off'}
+              {showCosts ? 'Hide Costs' : 'Show Costs'}
             </button>
           </div>
         </div>
@@ -200,7 +200,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ isDarkMode, setIsDar
                 className="control-button preset-btn"
                 onClick={() => handlePresetGenerate(preset.id)}
               >
-                {preset.icon} {preset.name}
+                {preset.name}
               </button>
             ))}
           </div>

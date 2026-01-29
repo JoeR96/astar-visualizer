@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Grid } from '../grid/Grid.tsx';
-import { ControlPanel } from '../control-panel/ControlPanel.tsx';
+import { Toolbar } from '../toolbar/Toolbar.tsx';
+import { StatsPanel } from '../statistics/StatsPanel.tsx';
+import { SettingsPanel } from '../settings/SettingsPanel.tsx';
 import { useControlsBoundedStore } from '../BoundedStore.ts';
 
 export interface LayoutProps {
@@ -32,16 +34,18 @@ export const Layout: React.FC<LayoutProps> = ({ defaultDarkMode }) => {
     <div ref={rootRef} className="astar-visualizer-root" data-theme={isDarkMode ? 'dark' : 'light'} data-visual-theme={visualTheme}>
       <div className="app-container">
         <header className="app-header">
-          <h1 className="app-title">A* Pathfinding</h1>
+          <h1 className="app-title">A* Pathfinding Visualizer</h1>
         </header>
+
+        <Toolbar />
 
         <main className="app-main">
           <Grid />
         </main>
 
-        <footer className="app-footer">
-          <ControlPanel isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-        </footer>
+        <StatsPanel />
+
+        <SettingsPanel isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       </div>
     </div>
   );

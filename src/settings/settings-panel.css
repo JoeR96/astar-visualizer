@@ -1,0 +1,285 @@
+/* Settings Panel Styles */
+.astar-visualizer-root .settings-container {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.astar-visualizer-root .settings-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.astar-visualizer-root .settings-toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.astar-visualizer-root .settings-icon {
+  font-size: 1rem;
+}
+
+.astar-visualizer-root .settings-chevron {
+  font-size: 0.625rem;
+  transition: transform 0.2s ease;
+}
+
+.astar-visualizer-root .settings-chevron.open {
+  transform: rotate(180deg);
+}
+
+.astar-visualizer-root .settings-panel {
+  border-top: 1px solid var(--border-color);
+  padding: 1rem 1.5rem 1.5rem;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.astar-visualizer-root .settings-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.astar-visualizer-root .settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.astar-visualizer-root .settings-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.astar-visualizer-root .settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.astar-visualizer-root .settings-row label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Select */
+.astar-visualizer-root .settings-select {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.astar-visualizer-root .settings-select:hover {
+  border-color: var(--border-hover);
+}
+
+.astar-visualizer-root .settings-select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Toggle Group */
+.astar-visualizer-root .settings-toggle-group {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.astar-visualizer-root .settings-toggle-btn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.astar-visualizer-root .settings-toggle-btn:not(:last-child) {
+  border-right: 1px solid var(--border-color);
+}
+
+.astar-visualizer-root .settings-toggle-btn:hover:not(.active) {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.astar-visualizer-root .settings-toggle-btn.active {
+  color: white;
+  background: var(--primary);
+}
+
+/* Stepper */
+.astar-visualizer-root .settings-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.astar-visualizer-root .settings-stepper button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.astar-visualizer-root .settings-stepper button:hover:not(:disabled) {
+  background: var(--primary);
+  color: white;
+}
+
+.astar-visualizer-root .settings-stepper button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.astar-visualizer-root .stepper-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+}
+
+/* Terrain Grid */
+.astar-visualizer-root .settings-terrain-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.astar-visualizer-root .settings-terrain-btn {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: transparent;
+  border: 1.5px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.astar-visualizer-root .settings-terrain-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.astar-visualizer-root .settings-terrain-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* Preset Grid */
+.astar-visualizer-root .settings-preset-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.astar-visualizer-root .settings-preset-btn {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.astar-visualizer-root .settings-preset-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .astar-visualizer-root .settings-panel {
+    padding: 0.75rem 1rem 1rem;
+  }
+
+  .astar-visualizer-root .settings-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .astar-visualizer-root .settings-panel {
+    padding: 0.5rem 0.75rem 0.75rem;
+  }
+
+  .astar-visualizer-root .settings-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .astar-visualizer-root .settings-toggle-group,
+  .astar-visualizer-root .settings-stepper,
+  .astar-visualizer-root .settings-select {
+    width: 100%;
+  }
+
+  .astar-visualizer-root .settings-toggle-btn {
+    flex: 1;
+  }
+}

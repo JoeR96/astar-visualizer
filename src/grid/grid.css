@@ -13,10 +13,12 @@
 .astar-visualizer-root .grid-container {
   display: grid;
   gap: 1px;
-  padding: 4px;
+  padding: 8px;
   background: var(--bg-secondary);
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.12);
   border: 1px solid var(--border-color);
   width: fit-content;
   height: fit-content;
@@ -29,8 +31,11 @@
   align-items: center;
   border: 1px solid var(--cell-border);
   cursor: pointer;
-  transition: all 0.15s ease;
-  border-radius: 2px;
+  transition:
+    transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.2s ease,
+    box-shadow 0.15s ease;
+  border-radius: 4px;
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -38,11 +43,12 @@
 }
 
 .astar-visualizer-root .grid-cell:hover {
-  transform: scale(1.02);
+  transform: scale(1.05);
+  z-index: 1;
 }
 
 .astar-visualizer-root .grid-cell:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
 }
 
 /* Cell Values Display */
