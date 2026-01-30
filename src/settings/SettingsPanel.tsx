@@ -35,6 +35,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isDarkMode, setIsD
     setSelectedButtonState,
     setCellState,
     resetCells,
+    animationSpeed,
+    setAnimationSpeed,
   } = useControlsBoundedStore();
 
   const theme = getTheme(visualTheme);
@@ -179,6 +181,29 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isDarkMode, setIsD
             {/* Algorithm Section */}
             <div className="settings-section">
               <h3 className="settings-section-title">Algorithm</h3>
+              <div className="settings-row">
+                <label>Speed</label>
+                <div className="settings-toggle-group">
+                  <button
+                    className={`settings-toggle-btn ${animationSpeed === 0.5 ? 'active' : ''}`}
+                    onClick={() => setAnimationSpeed(0.5)}
+                  >
+                    Slow
+                  </button>
+                  <button
+                    className={`settings-toggle-btn ${animationSpeed === 1 ? 'active' : ''}`}
+                    onClick={() => setAnimationSpeed(1)}
+                  >
+                    Normal
+                  </button>
+                  <button
+                    className={`settings-toggle-btn ${animationSpeed === 2 ? 'active' : ''}`}
+                    onClick={() => setAnimationSpeed(2)}
+                  >
+                    Fast
+                  </button>
+                </div>
+              </div>
               <div className="settings-row">
                 <label>Diagonal Movement</label>
                 <div className="settings-toggle-group">

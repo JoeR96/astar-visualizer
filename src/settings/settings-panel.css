@@ -228,6 +228,7 @@
 /* Preset Grid */
 .astar-visualizer-root .settings-preset-grid {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
