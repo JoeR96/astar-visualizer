@@ -202,7 +202,12 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
               const newCells = prevState.cells.map(row =>
                 row.map(cell => ({
                   ...cell,
-                  state: node.row === cell.row && node.col === cell.col ? CellState.Path : cell.state
+                  // Only mark open ground: overwriting start/end/terrain would erase them for the next run
+                  // (the grid colours path cells from the path list, so terrain still shows as part of the route)
+                  state: node.row === cell.row && node.col === cell.col &&
+                    (cell.state === CellState.Empty || cell.state === CellState.Visited)
+                    ? CellState.Path
+                    : cell.state
                 }))
               );
               return {

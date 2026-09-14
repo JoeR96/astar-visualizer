@@ -21,6 +21,14 @@ export const initializeStartNode = (
   };
 };
 
+const impassableStates = [CellState.Obstacle, CellState.Water, CellState.Mountain];
+
+// Forest is passable but slow, so paths only cut through trees when going around costs more
+export const FOREST_COST_MULTIPLIER = 3;
+
+const terrainCostMultiplier = (state: CellState): number =>
+  state === CellState.Forest ? FOREST_COST_MULTIPLIER : 1;
+
 export const getNeighbors = (
   node: aStarNode,
   grid: Cell[][],
@@ -42,17 +50,19 @@ export const getNeighbors = (
     );
   }
 
-  const impassableStates = [CellState.Obstacle, CellState.Water, CellState.Mountain];
+  const inBounds = (row: number, col: number) =>
+    row >= 0 && row < grid.length && col >= 0 && col < grid[0].length;
+  const isBlocked = (row: number, col: number) =>
+    !inBounds(row, col) || impassableStates.includes(grid[row][col].state);
 
   return neighbors
     .filter((neighbor) => {
-      return (
-        neighbor.row >= 0 &&
-        neighbor.row < grid.length &&
-        neighbor.col >= 0 &&
-        neighbor.col < grid[0].length &&
-        !impassableStates.includes(grid[neighbor.row][neighbor.col].state)
-      );
+      if (isBlocked(neighbor.row, neighbor.col)) {
+        return false;
+      }
+      // A diagonal step can't squeeze between two blocked cells that touch at a corner
+      const isDiagonal = neighbor.row !== node.row && neighbor.col !== node.col;
+      return !(isDiagonal && isBlocked(node.row, neighbor.col) && isBlocked(neighbor.row, node.col));
     })
     .map((neighbor) => ({
       row: neighbor.row,
@@ -68,7 +78,8 @@ export const calculateCosts = (
 ): { g: number; h: number; f: number } => {
   const dRow = Math.abs(node.row - neighbor.row);
   const dCol = Math.abs(node.col - neighbor.col);
-  const g = node.g + (dRow === 0 || dCol === 0 ? 10 : 14);
+  const stepCost = dRow === 0 || dCol === 0 ? 10 : 14;
+  const g = node.g + stepCost * terrainCostMultiplier(neighbor.state);
   const h = heuristic(neighbor, end);
   const f = g + h;
   return { g, h, f };

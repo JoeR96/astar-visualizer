@@ -133,3 +133,68 @@ describe('aStar', () => {
     expect(result.visitedNodes).to.be.an('array').that.is.not.empty;
   });
 });
+
+// Builds a grid from rows of characters: . empty, # obstacle, F forest
+const gridFrom = (rows: string[]): Cell[][] =>
+  rows.map((line, row) =>
+    [...line].map((ch, col) => ({
+      row,
+      col,
+      state: ch === '#' ? CellState.Obstacle : ch === 'F' ? CellState.Forest : CellState.Empty,
+    }))
+  );
+
+describe('forest terrain', () => {
+  it('costs more to enter than open ground', () => {
+    const node: aStarNode = { row: 0, col: 0, g: 0, h: 0, f: 0, parent: null };
+    const end = { row: 0, col: 5, state: CellState.End };
+
+    const open = calculateCosts(node, { row: 0, col: 1, state: CellState.Empty }, end);
+    const forest = calculateCosts(node, { row: 0, col: 1, state: CellState.Forest }, end);
+
+    expect(forest.g).toBeGreaterThan(open.g);
+  });
+
+  it('routes around a forest when a slightly longer open path exists', () => {
+    const grid = gridFrom([
+      '.....',
+      '.FFF.',
+      '.....',
+    ]);
+    const start = { row: 1, col: 0, state: CellState.Start };
+    const end = { row: 1, col: 4, state: CellState.End };
+
+    const { path } = aStar(grid, start, end, false);
+
+    expect(path.length).toBeGreaterThan(0);
+    expect(path.some(({ row, col }) => grid[row][col].state === CellState.Forest)).toBe(false);
+  });
+
+  it('still crosses a forest when it is the only way through', () => {
+    const grid = gridFrom([
+      '#####',
+      '.FFF.',
+      '#####',
+    ]);
+    const start = { row: 1, col: 0, state: CellState.Start };
+    const end = { row: 1, col: 4, state: CellState.End };
+
+    const { path } = aStar(grid, start, end, false);
+
+    expect(path).toHaveLength(5);
+  });
+});
+
+describe('diagonal movement', () => {
+  it('cannot squeeze between two walls that touch at a corner', () => {
+    const grid = gridFrom([
+      '.#',
+      '#.',
+    ]);
+    const node: aStarNode = { row: 0, col: 0, g: 0, h: 0, f: 0, parent: null };
+
+    const neighbors = getNeighbors(node, grid, true);
+
+    expect(neighbors).not.toContainEqual(expect.objectContaining({ row: 1, col: 1 }));
+  });
+});
