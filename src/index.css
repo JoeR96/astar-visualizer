@@ -76,7 +76,7 @@
   --cell-mountain: #636366;
 
   /* Interactive colors for dark mode - brighter variants */
-  --primary: #0a84ff;
+  --primary: #0060df; /* white text needs 4.5:1; #0a84ff was 3.65:1, this is 5.62:1 */
   --primary-hover: #409cff;
   --success: #30d158;
   --success-hover: #34c759;

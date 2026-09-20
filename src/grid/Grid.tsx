@@ -97,15 +97,14 @@ export const Grid: React.FC = () => {
 
             let backgroundColor = getCellColor(cell, isVisited);
 
-            if (isPathNode) {
-              const pathIndex = path.findIndex(node => node.row === cell.row && node.col === cell.col);
-              if (pathIndex === 0) {
-                backgroundColor = 'var(--cell-start)'; 
-              } else if (pathIndex === path.length - 1) {
-                backgroundColor = 'var(--cell-end)'; 
-              } else {
-                backgroundColor = 'var(--cell-path)'; 
-              }
+            // Colour the route by what the cell *is*, not by its index in the path.
+            // The path array grows a node at a time while the run animates, so
+            // keying off `path.length - 1` painted the advancing tip of the route
+            // with the goal colour - making it look like a second goal until the
+            // next node arrived. The real start and goal keep their own colours
+            // from getCellColor, because the store never overwrites those states.
+            if (isPathNode && cell.state !== CellState.Start && cell.state !== CellState.End) {
+              backgroundColor = 'var(--cell-path)';
             }
 
             return (

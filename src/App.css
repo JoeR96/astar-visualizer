@@ -91,3 +91,45 @@
     border: 2px solid black !important;
   }
 }
+
+/* --- Colour key -------------------------------------------------------- */
+.astar-visualizer-root .astar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 18px;
+  margin: 0;
+  padding: 10px 16px;
+  list-style: none;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.astar-visualizer-root .astar-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.astar-visualizer-root .astar-legend-swatch {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  border: 1px solid var(--cell-border);
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .astar-visualizer-root .astar-legend {
+    gap: 4px 12px;
+    padding: 8px 10px;
+  }
+
+  .astar-visualizer-root .astar-legend-item {
+    font-size: 0.75rem;
+  }
+}

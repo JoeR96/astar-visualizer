@@ -1,7 +1,7 @@
 {
   "name": "astar-visualizer",
   "private": false,
-  "version": "1.2.1",
+  "version": "1.3.0",
   "type": "module",
   "description": "A React component for visualizing A* pathfinding algorithm",
   "main": "./dist/astar-visualizer.umd.cjs",
@@ -9,9 +9,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/astar-visualizer.js",
-      "require": "./dist/astar-visualizer.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/astar-visualizer.umd.cjs"
     },
     "./style.css": "./dist/style.css"
   },
@@ -35,7 +35,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:lib": "tsc --project tsconfig.lib.json && vite build --config vite.config.lib.ts",
+    "build:lib": "vite build --config vite.config.lib.ts && tsc --project tsconfig.lib.json",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
@@ -45,11 +45,10 @@
     "prepublishOnly": "npm run build:lib"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
   },
   "dependencies": {
-    "framer-motion": "^10.16.4",
     "zustand": "^4.4.1"
   },
   "devDependencies": {

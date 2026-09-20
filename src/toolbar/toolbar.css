@@ -28,6 +28,8 @@
 /* Toolbar Button Base */
 .astar-visualizer-root .toolbar-button {
   padding: 0.5rem 1rem;
+  /* Comfortable touch target; the controls are often used on a phone */
+  min-height: 44px;
   background: transparent;
   border: 1.5px solid var(--border-color);
   border-radius: 8px;
@@ -57,13 +59,15 @@
 .astar-visualizer-root .toolbar-button.start.active {
   background: var(--success);
   border-color: var(--success);
-  color: white;
+  /* white on --success is 2.02:1; dark ink on the same green is 7.34:1 */
+  color: #0b2e13;
 }
 
 .astar-visualizer-root .toolbar-button.end.active {
   background: var(--danger);
   border-color: var(--danger);
-  color: white;
+  /* white on --danger is 3.41:1; dark ink on the same red is 4.96:1 */
+  color: #3d0a05;
 }
 
 .astar-visualizer-root .toolbar-button.wall.active {

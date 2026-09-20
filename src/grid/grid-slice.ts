@@ -10,6 +10,13 @@ type Cell = {
 };
 
 export interface GridSlice {
+  /**
+   * Incremented whenever the grid is reset or a new search starts. The path
+   * animation is a detached async loop, so it checks this before every write
+   * and bails if a newer run has begun - otherwise a reset (or a second Find
+   * Path) leaves the previous run still painting cells over the new grid.
+   */
+  runId: number;
   cells: Cell[][];
   rows: number;
   columns: number;
@@ -20,6 +27,17 @@ export interface GridSlice {
   setNumberOfRows: (numberOfRows: number) => void;
   setCellState: (row: number, col: number, state: CellState) => void;
   resetCells: () => void;
+  /**
+   * Replace the whole grid in a single update. Seeding a scene as
+   * reset-then-set-each-cell leaves brief intermediate frames on screen; one
+   * atomic write cannot.
+   */
+  applyScene: (scene: { row: number; col: number; state: CellState }[]) => void;
+  /**
+   * Abandon any running path animation without touching the grid, so handing
+   * control to a visitor mid-run stops the cells moving under them.
+   */
+  cancelRun: () => void;
   handleFindPath: (canTravelDiagonally: boolean) => void;
   path: aStarNode[];
   visitedNodes: aStarNode[];
@@ -29,6 +47,7 @@ export interface GridSlice {
 
 export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
   set,
+  get,
 ) => ({
   cells: Array.from({ length: 8 }, (_, row) =>
     Array.from({ length: 12 }, (_, col) => ({
@@ -37,6 +56,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
       state: CellState.Empty,
     })),
   ),
+  runId: 0,
   rows: 8,
   columns: 12,
   startTile: null,
@@ -150,6 +170,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
   resetCells: () => {
     set((state) => ({
       ...state,
+      runId: state.runId + 1,
       cells: state.cells.map((row) =>
         row.map((cell) => ({
           ...cell,
@@ -163,8 +184,41 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
       visitedNodes: [],
     }));
   },
+  cancelRun: () => {
+    set((state) => ({ ...state, runId: state.runId + 1 }));
+  },
+  applyScene: (scene) => {
+    set((state) => {
+      const cells = state.cells.map((row) =>
+        row.map((cell) => ({ ...cell, state: CellState.Empty })),
+      );
+      let startTile: { row: number; col: number } | null = null;
+      let endTile: { row: number; col: number } | null = null;
+      const obstacleTiles: { row: number; col: number }[] = [];
+
+      for (const item of scene) {
+        if (!cells[item.row] || !cells[item.row][item.col]) continue;
+        cells[item.row][item.col].state = item.state;
+        if (item.state === CellState.Start) startTile = { row: item.row, col: item.col };
+        if (item.state === CellState.End) endTile = { row: item.row, col: item.col };
+        if (item.state === CellState.Obstacle) obstacleTiles.push({ row: item.row, col: item.col });
+      }
+
+      return {
+        ...state,
+        runId: state.runId + 1,
+        cells,
+        startTile,
+        endTile,
+        obstacleTiles,
+        path: [],
+        visitedNodes: [],
+      };
+    });
+  },
   handleFindPath: (canTravelDiagonally: boolean) => {
     set((state) => {
+      const thisRun = state.runId + 1;
       const startCell = state.cells.flat().find(cell => cell.state === CellState.Start);
       const endCell = state.cells.flat().find(cell => cell.state === CellState.End);
 
@@ -182,6 +236,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
         const showPathWithDelay = async (path: aStarNode[], visited: aStarNode[]) => {
           for (let node of visited) {
             await new Promise<void>(resolve => setTimeout(resolve, 100));
+            if (get().runId !== thisRun) return;
             set((prevState) => {
               const newCells = prevState.cells.map(row =>
                 row.map(cell => ({
@@ -198,6 +253,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
           }
           for (let node of path) {
             await new Promise<void>(resolve => setTimeout(resolve, 250));
+            if (get().runId !== thisRun) return;
             set((prevState) => {
               const newCells = prevState.cells.map(row =>
                 row.map(cell => ({
@@ -220,8 +276,8 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
         };
 
         showPathWithDelay(path, visitedNodes);
- 
-        return { ...state, path: [], visitedNodes: [] };
+
+        return { ...state, runId: thisRun, path: [], visitedNodes: [] };
       }
 
       return state;
