@@ -1,0 +1,32 @@
+name: Publish to npm
+
+# Publishes via npm trusted publishing (OIDC): no NPM_TOKEN, no 2FA prompt.
+# npm must be 11.5.1+ for OIDC, and id-token: write is what mints the identity.
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Use an npm that supports OIDC
+        run: |
+          npm i -g npm@latest
+          npm -v
+
+      - run: npm ci
+
+      # prepublishOnly runs build:lib, so dist is built here from source.
+      - run: npm publish --provenance --access public
