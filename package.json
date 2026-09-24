@@ -30,7 +30,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/JoeR96/astar-visualizer.git"
   },
   "scripts": {
     "dev": "vite",
