@@ -9,6 +9,7 @@ export interface AStarVisualizerProps {
    * - `'off'` (default) keeps the historic behaviour: an empty grid.
    * - `'seed'` lays out a start, a goal and walls so the grid is never blank.
    * - `'loop'` also runs the search on repeat until the visitor interacts.
+   *   It waits between runs while the component is scrolled out of view.
    *
    * `true` is accepted as a shorthand for `'loop'`.
    */
