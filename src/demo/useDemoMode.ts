@@ -20,6 +20,9 @@ export type DemoMode = 'off' | 'seed' | 'loop';
  *
  * Any pointer or key input inside the component hands control to the visitor -
  * the loop stops for good and their grid is left alone.
+ *
+ * The loop also parks between runs while the component is scrolled out of view,
+ * so a page that embeds it is not animating a grid nobody can see.
  */
 export const useDemoMode = (mode: DemoMode, rootRef: React.RefObject<HTMLElement>) => {
   useEffect(() => {
@@ -37,6 +40,28 @@ export const useDemoMode = (mode: DemoMode, rootRef: React.RefObject<HTMLElement
     const seed = () => {
       store.getState().applyScene([...DEMO_CELLS]);
     };
+
+    // Assume visible until told otherwise: the observer reports within a frame of
+    // mounting, well before the first run, and without one (an old browser, a test
+    // environment) the loop behaves as it always has.
+    let visible = true;
+    let resumeWhenVisible: (() => void) | null = null;
+    const root = rootRef.current;
+    const observer =
+      root && typeof IntersectionObserver !== 'undefined'
+        ? new IntersectionObserver(entries => {
+            visible = entries[entries.length - 1].isIntersecting;
+            if (visible) {
+              resumeWhenVisible?.();
+              resumeWhenVisible = null;
+            }
+          })
+        : null;
+    if (root) observer?.observe(root);
+
+    /** Resolves at once on screen; off screen, when the component next scrolls into view. */
+    const untilVisible = () =>
+      visible ? Promise.resolve() : new Promise<void>(resolve => { resumeWhenVisible = resolve; });
 
     /**
      * Resolves once the run stops producing new path nodes, or it times out.
@@ -71,6 +96,8 @@ export const useDemoMode = (mode: DemoMode, rootRef: React.RefObject<HTMLElement
       await wait(1200);
 
       while (!cancelled) {
+        await untilVisible();
+        if (cancelled) return;
         store.getState().handleFindPath(store.getState().canTravelDiagonally);
         await waitForRunToSettle(store.getState().runId);
         if (cancelled) return;
@@ -90,7 +117,6 @@ export const useDemoMode = (mode: DemoMode, rootRef: React.RefObject<HTMLElement
       store.getState().cancelRun();
     };
 
-    const root = rootRef.current;
     root?.addEventListener('pointerdown', handOver);
     root?.addEventListener('keydown', handOver);
 
@@ -99,6 +125,7 @@ export const useDemoMode = (mode: DemoMode, rootRef: React.RefObject<HTMLElement
     return () => {
       cancelled = true;
       timers.forEach(clearTimeout);
+      observer?.disconnect();
       root?.removeEventListener('pointerdown', handOver);
       root?.removeEventListener('keydown', handOver);
     };
