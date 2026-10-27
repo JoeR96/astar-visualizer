@@ -1,5 +1,7 @@
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+/* Scoped to the component root: the stylesheet is loaded next to a host page's own CSS,
+   so nothing here may target :root, body or *. A host sets --astar-font to inherit its type. */
+.astar-visualizer-root {
+  font-family: var(--astar-font, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif);
   line-height: 1.5;
   font-weight: 400;
 

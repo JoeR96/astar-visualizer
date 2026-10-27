@@ -41,9 +41,10 @@
 
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  .astar-visualizer-root,
+  .astar-visualizer-root *,
+  .astar-visualizer-root *::before,
+  .astar-visualizer-root *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -51,14 +52,14 @@
   }
   
   /* Disable theme transitions for users who prefer reduced motion */
-  * {
+  .astar-visualizer-root * {
     transition: none !important;
   }
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  :root {
+  .astar-visualizer-root {
     --cell-border: #000000;
     --text-primary: #000000;
     --text-secondary: #000000;
@@ -66,7 +67,7 @@
     --bg-secondary: #ffffff;
   }
   
-  [data-theme="dark"] {
+  .astar-visualizer-root[data-theme="dark"] {
     --cell-border: #ffffff;
     --text-primary: #ffffff;
     --text-secondary: #ffffff;
