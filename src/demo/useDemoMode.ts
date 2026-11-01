@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
 import { useControlsBoundedStore } from '../BoundedStore.ts';
 import { DEMO_CELLS } from './demoScene.ts';
+import { getTheme } from '../themes/index.ts';
+import { buildPresetScene } from '../themes/presets.ts';
+import { aStar } from '../services/astarService.ts';
+import { CellState } from '../enums.ts';
 
 /** How long to hold the finished path on screen before starting over. */
 const HOLD_AFTER_RUN_MS = 3000;
@@ -21,7 +25,12 @@ export type DemoMode = 'off' | 'seed' | 'loop';
  * Any pointer or key input inside the component hands control to the visitor -
  * the loop stops for good and their grid is left alone.
  */
-export const useDemoMode = (mode: DemoMode, rootRef: React.RefObject<HTMLElement>) => {
+export const useDemoMode = (
+  mode: DemoMode,
+  rootRef: React.RefObject<HTMLElement>,
+  /** Seed from the theme's preset maps in turn, instead of the one hand-placed scene. */
+  maps = false,
+) => {
   useEffect(() => {
     if (mode === 'off') return;
 
@@ -34,8 +43,33 @@ export const useDemoMode = (mode: DemoMode, rootRef: React.RefObject<HTMLElement
         timers.push(setTimeout(resolve, ms));
       });
 
+    // A generated map with no way through would leave the loop waiting out its timeout
+    // on an empty grid, so a map only plays if A* can actually reach the goal on it.
+    let mapIndex = 0;
+    const solvable = (scene: { row: number; col: number; state: CellState }[]) => {
+      const { rows, columns, canTravelDiagonally } = store.getState();
+      const grid = Array.from({ length: rows }, (_, row) =>
+        Array.from({ length: columns }, (_, col) => ({ row, col, state: CellState.Empty })));
+      for (const c of scene) if (grid[c.row]?.[c.col]) grid[c.row][c.col].state = c.state;
+      const start = grid[0][0];
+      const end = grid[rows - 1][columns - 1];
+      return aStar(grid, start, end, canTravelDiagonally).path.length > 0;
+    };
+
     const seed = () => {
-      store.getState().applyScene([...DEMO_CELLS]);
+      const state = store.getState();
+      if (maps) {
+        const presets = getTheme(state.visualTheme).presets;
+        for (let tries = 0; tries < presets.length * 3; tries++) {
+          const id = presets[mapIndex++ % presets.length].id;
+          const scene = buildPresetScene(id, state.rows, state.columns, state.visualTheme);
+          if (scene.length > 0 && solvable(scene)) {
+            state.applyScene(scene);
+            return;
+          }
+        }
+      }
+      state.applyScene([...DEMO_CELLS]);
     };
 
     /**
@@ -102,5 +136,5 @@ export const useDemoMode = (mode: DemoMode, rootRef: React.RefObject<HTMLElement
       root?.removeEventListener('pointerdown', handOver);
       root?.removeEventListener('keydown', handOver);
     };
-  }, [mode, rootRef]);
+  }, [mode, rootRef, maps]);
 };

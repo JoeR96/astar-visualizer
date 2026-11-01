@@ -28,6 +28,16 @@ export interface AStarVisualizerProps {
    * this when embedding inside a page that has its own `<main>`.
    */
   standalone?: boolean;
+  /** Starting grid size. Defaults to 8 rows by 12 columns; visitors can still change it in Settings. */
+  rows?: number;
+  columns?: number;
+  /** Show one-click maps (river crossing, maze...) under the grid. Picking one runs the search. */
+  showPresets?: boolean;
+  /**
+   * With `demo: 'loop'`, cycle through the theme's generated maps instead of the one
+   * hand-placed scene, so the loop shows terrain costs as well as walls.
+   */
+  demoMaps?: boolean;
 }
 
 function App({
@@ -36,6 +46,10 @@ function App({
   showLegend = false,
   headingLevel = 1,
   standalone = true,
+  rows,
+  columns,
+  showPresets = false,
+  demoMaps = false,
 }: AStarVisualizerProps) {
   return (
     <Layout
@@ -44,6 +58,10 @@ function App({
       showLegend={showLegend}
       headingLevel={headingLevel}
       standalone={standalone}
+      rows={rows}
+      columns={columns}
+      showPresets={showPresets}
+      demoMaps={demoMaps}
     />
   );
 }

@@ -1,4 +1,4 @@
-import { CellState } from '../enums';
+import { CellState, VisualTheme } from '../enums';
 
 export interface TerrainPlacement {
   row: number;
@@ -211,4 +211,40 @@ export const generateClassicMaze = (rows: number, cols: number): TerrainPlacemen
     const nearBottomRight = p.row >= rows - clearRadius && p.col >= cols - clearRadius;
     return !nearTopLeft && !nearBottomRight;
   });
+};
+
+/**
+ * A whole preset map, start and goal included, ready for applyScene.
+ *
+ * The start sits top-left and the goal bottom-right; every generator keeps
+ * those corners clear. Unknown ids, or ids the theme has no terrain for, give
+ * an empty list.
+ */
+export const buildPresetScene = (
+  presetId: string,
+  rows: number,
+  cols: number,
+  theme: VisualTheme,
+): TerrainPlacement[] => {
+  let placements: TerrainPlacement[];
+  if (theme === VisualTheme.Medieval) {
+    switch (presetId) {
+      case 'river': placements = generateRiver(rows, cols); break;
+      case 'mountains': placements = generateMountainRange(rows, cols); break;
+      case 'maze': placements = generateMaze(rows, cols); break;
+      case 'random': placements = generateRandomScatter(rows, cols); break;
+      default: return [];
+    }
+  } else {
+    switch (presetId) {
+      case 'random': placements = generateClassicRandom(rows, cols); break;
+      case 'maze': placements = generateClassicMaze(rows, cols); break;
+      default: return [];
+    }
+  }
+  return [
+    ...placements,
+    { row: 0, col: 0, state: CellState.Start },
+    { row: rows - 1, col: cols - 1, state: CellState.End },
+  ];
 };

@@ -55,31 +55,27 @@
   outline-offset: 2px;
 }
 
-/* Tool Button Active States */
+/* Tool Button Active States
+   A tinted outline, not a solid fill: a filled green "Start" looked like the main
+   call to action, and the only button that runs anything is Find Path. */
 .astar-visualizer-root .toolbar-button.start.active {
-  background: var(--success);
   border-color: var(--success);
-  /* white on --success is 2.02:1; dark ink on the same green is 7.34:1 */
-  color: #0b2e13;
+  /* green or red text on the light theme's white fails contrast, so the colour stays in the border */
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--success) 14%, transparent);
 }
 
 .astar-visualizer-root .toolbar-button.end.active {
-  background: var(--danger);
   border-color: var(--danger);
-  /* white on --danger is 3.41:1; dark ink on the same red is 4.96:1 */
-  color: #3d0a05;
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
 }
 
-.astar-visualizer-root .toolbar-button.wall.active {
-  background: var(--text-primary);
-  border-color: var(--text-primary);
-  color: var(--bg-primary);
-}
-
+.astar-visualizer-root .toolbar-button.wall.active,
 .astar-visualizer-root .toolbar-button.erase.active {
-  background: var(--text-muted);
-  border-color: var(--text-muted);
-  color: white;
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--text-primary) 12%, transparent);
 }
 
 /* Reset Button */

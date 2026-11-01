@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Grid } from '../grid/Grid.tsx';
 import { Toolbar } from '../toolbar/Toolbar.tsx';
 import { StatsPanel } from '../statistics/StatsPanel.tsx';
@@ -6,6 +6,7 @@ import { SettingsPanel } from '../settings/SettingsPanel.tsx';
 import { Legend } from '../legend/Legend.tsx';
 import { useControlsBoundedStore } from '../BoundedStore.ts';
 import { useDemoMode, DemoMode } from '../demo/useDemoMode.ts';
+import { PresetBar } from '../presets/PresetBar.tsx';
 
 export interface LayoutProps {
   defaultDarkMode?: boolean;
@@ -13,6 +14,10 @@ export interface LayoutProps {
   showLegend?: boolean;
   headingLevel?: 1 | 2 | 3 | 4 | 5 | 6 | 'none';
   standalone?: boolean;
+  rows?: number;
+  columns?: number;
+  showPresets?: boolean;
+  demoMaps?: boolean;
 }
 
 export const Layout: React.FC<LayoutProps> = ({
@@ -21,9 +26,19 @@ export const Layout: React.FC<LayoutProps> = ({
   showLegend = false,
   headingLevel = 1,
   standalone = true,
+  rows,
+  columns,
+  showPresets = false,
+  demoMaps = false,
 }) => {
   const rootRef = useRef<HTMLDivElement>(null);
-  const { visualTheme } = useControlsBoundedStore();
+  const { visualTheme, setNumberOfRows, setNumberOfColumns } = useControlsBoundedStore();
+
+  // The starting grid size. Set before the demo seeds, so its scene fits the grid it lands on.
+  useLayoutEffect(() => {
+    if (rows) setNumberOfRows(rows);
+    if (columns) setNumberOfColumns(columns);
+  }, [rows, columns, setNumberOfRows, setNumberOfColumns]);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (defaultDarkMode !== undefined) {
       return defaultDarkMode;
@@ -32,7 +47,7 @@ export const Layout: React.FC<LayoutProps> = ({
     return saved ? JSON.parse(saved) : false;
   });
 
-  useDemoMode(demo, rootRef);
+  useDemoMode(demo, rootRef, demoMaps);
 
   useEffect(() => {
     if (defaultDarkMode === undefined) {
@@ -62,11 +77,13 @@ export const Layout: React.FC<LayoutProps> = ({
           <Grid />
         </GridRegion>
 
+        {showPresets && <PresetBar />}
+
         {showLegend && <Legend />}
 
         <StatsPanel />
 
-        <SettingsPanel isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+        <SettingsPanel isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} hidePresets={showPresets} />
       </div>
     </div>
   );
