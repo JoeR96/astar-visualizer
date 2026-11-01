@@ -2,22 +2,16 @@ import React, { useState } from 'react';
 import { useControlsBoundedStore } from '../BoundedStore';
 import { CellState, VisualTheme } from '../enums';
 import { getTheme, getTerrainTools, THEMES } from '../themes/index';
-import {
-  generateRiver,
-  generateMountainRange,
-  generateMaze,
-  generateRandomScatter,
-  generateClassicRandom,
-  generateClassicMaze,
-} from '../themes/presets';
+import { buildPresetScene } from '../themes/presets';
 import './settings-panel.css';
 
 export interface SettingsPanelProps {
   isDarkMode: boolean;
   setIsDarkMode: (value: boolean) => void;
+  hidePresets?: boolean;
 }
 
-export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isDarkMode, setIsDarkMode }) => {
+export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isDarkMode, setIsDarkMode, hidePresets = false }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const {
@@ -33,8 +27,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isDarkMode, setIsD
     setShowCosts,
     activeButton,
     setSelectedButtonState,
-    setCellState,
-    resetCells,
+    applyScene,
     animationSpeed,
     setAnimationSpeed,
   } = useControlsBoundedStore();
@@ -43,45 +36,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isDarkMode, setIsD
   const terrainTools = getTerrainTools(visualTheme);
 
   const handlePresetGenerate = (presetId: string) => {
-    resetCells();
-
-    let placements;
-    if (visualTheme === VisualTheme.Medieval) {
-      switch (presetId) {
-        case 'river':
-          placements = generateRiver(rows, columns);
-          break;
-        case 'mountains':
-          placements = generateMountainRange(rows, columns);
-          break;
-        case 'maze':
-          placements = generateMaze(rows, columns);
-          break;
-        case 'random':
-          placements = generateRandomScatter(rows, columns);
-          break;
-        default:
-          return;
-      }
-    } else {
-      switch (presetId) {
-        case 'random':
-          placements = generateClassicRandom(rows, columns);
-          break;
-        case 'maze':
-          placements = generateClassicMaze(rows, columns);
-          break;
-        default:
-          return;
-      }
-    }
-
-    for (const placement of placements) {
-      setCellState(placement.row, placement.col, placement.state);
-    }
-
-    setCellState(0, 0, CellState.Start);
-    setCellState(rows - 1, columns - 1, CellState.End);
+    const scene = buildPresetScene(presetId, rows, columns, visualTheme);
+    if (scene.length === 0) return;
+    applyScene(scene);
     setSelectedButtonState(CellState.Obstacle);
   };
 
@@ -261,7 +218,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isDarkMode, setIsD
               </div>
             )}
 
-            {/* Presets Section */}
+            {/* Presets Section: left out when the preset bar under the grid already offers them */}
+            {!hidePresets && (
             <div className="settings-section">
               <h3 className="settings-section-title">Generate Map</h3>
               <div className="settings-preset-grid">
@@ -276,6 +234,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isDarkMode, setIsD
                 ))}
               </div>
             </div>
+            )}
           </div>
         </div>
       )}

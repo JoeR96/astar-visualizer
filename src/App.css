@@ -134,3 +134,69 @@
     font-size: 0.75rem;
   }
 }
+
+/* --- One-click maps ----------------------------------------------------- */
+.astar-visualizer-root .astar-presets {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px 8px;
+  padding: 10px 16px 0;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.astar-visualizer-root .astar-presets + .astar-legend {
+  border-top: none;
+}
+
+.astar-visualizer-root .astar-presets-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-right: 4px;
+  white-space: nowrap;
+  flex: none;
+}
+
+.astar-visualizer-root .astar-preset-button {
+  padding: 0.3rem 0.75rem;
+  min-height: 32px;
+  font-size: 0.8125rem;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+}
+
+.astar-visualizer-root .astar-preset-button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.astar-visualizer-root .astar-preset-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .astar-visualizer-root .astar-preset-button {
+    min-height: 40px;
+  }
+}
+
+/* Phones: one scrolling row of maps instead of three wrapped rows that pushed the grid off */
+@media (max-width: 480px) {
+  .astar-visualizer-root .astar-presets {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 8px 10px 0;
+    scrollbar-width: none;
+  }
+
+  .astar-visualizer-root .astar-preset-button {
+    flex: none;
+  }
+}

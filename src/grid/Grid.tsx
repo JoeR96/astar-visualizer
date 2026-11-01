@@ -11,17 +11,23 @@ export const Grid: React.FC = () => {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const containerRef = React.useRef<HTMLDivElement>(null);
 
+  // A ResizeObserver, not window resize: the grid's space also changes when a host
+  // page resizes its card or the settings panel opens, and a stale size clips rows.
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
     const updateSize = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        setContainerSize({ width: rect.width, height: rect.height });
-      }
+      const rect = el.getBoundingClientRect();
+      setContainerSize({ width: rect.width, height: rect.height });
     };
-
     updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateSize);
+      return () => window.removeEventListener('resize', updateSize);
+    }
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   const handleCellClick = (row: number, col: number) => {
@@ -54,13 +60,13 @@ export const Grid: React.FC = () => {
     const cols = cells[0]?.length || 1;
     const rows = cells.length || 1;
     
-    // Account for padding and gaps
-    const padding = 20;
-    const gap = cols + rows; // Total gap space
-    
-    const availableWidth = containerSize.width - padding - gap;
-    const availableHeight = containerSize.height - padding - gap;
-    
+    // Everything around the cells: the wrapper's padding (0.5rem a side), the grid's
+    // own padding (8px a side) and border (1px a side), and a 1px gap between cells.
+    const chrome = 16 + 16 + 2;
+
+    const availableWidth = containerSize.width - chrome - (cols - 1);
+    const availableHeight = containerSize.height - chrome - (rows - 1);
+
     const cellSizeByWidth = availableWidth / cols;
     const cellSizeByHeight = availableHeight / rows;
     
@@ -68,7 +74,7 @@ export const Grid: React.FC = () => {
     const size = Math.min(cellSizeByWidth, cellSizeByHeight);
     
     // Clamp between reasonable min/max
-    return Math.max(15, Math.min(size, 60));
+    return Math.floor(Math.max(15, Math.min(size, 60)));
   };
 
   const cellSize = getCellSize();

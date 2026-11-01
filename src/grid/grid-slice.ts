@@ -233,9 +233,15 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
 
         const { path, visitedNodes } = aStar(gridForAStar, startCell, endCell, canTravelDiagonally);
 
+        // The Speed setting divides the delays, and big grids get shorter steps so a run
+        // still plays out in a few seconds rather than half a minute.
+        const speed = (get() as unknown as { animationSpeed?: number }).animationSpeed || 1;
+        const visitDelay = Math.min(100, 4000 / Math.max(1, visitedNodes.length)) / speed;
+        const pathDelay = Math.min(250, 2000 / Math.max(1, path.length)) / speed;
+
         const showPathWithDelay = async (path: aStarNode[], visited: aStarNode[]) => {
           for (let node of visited) {
-            await new Promise<void>(resolve => setTimeout(resolve, 100));
+            await new Promise<void>(resolve => setTimeout(resolve, visitDelay));
             if (get().runId !== thisRun) return;
             set((prevState) => {
               const newCells = prevState.cells.map(row =>
@@ -252,7 +258,7 @@ export const createGridSlice: StateCreator<GridSlice, [], [], GridSlice> = (
             });
           }
           for (let node of path) {
-            await new Promise<void>(resolve => setTimeout(resolve, 250));
+            await new Promise<void>(resolve => setTimeout(resolve, pathDelay));
             if (get().runId !== thisRun) return;
             set((prevState) => {
               const newCells = prevState.cells.map(row =>

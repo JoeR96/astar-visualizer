@@ -12,10 +12,12 @@ export const Toolbar: React.FC = () => {
     resetCells,
   } = useControlsBoundedStore();
 
+  // These pick what a click on the grid paints. Plain "Start" read as "run the demo",
+  // so each label says what it does to the grid; Find Path is the only button that runs.
   const tools = [
-    { label: 'Start', state: CellState.Start, className: 'start' },
-    { label: 'End', state: CellState.End, className: 'end' },
-    { label: 'Wall', state: CellState.Obstacle, className: 'wall' },
+    { label: 'Move start', state: CellState.Start, className: 'start' },
+    { label: 'Move goal', state: CellState.End, className: 'end' },
+    { label: 'Draw walls', state: CellState.Obstacle, className: 'wall' },
     { label: 'Erase', state: CellState.Empty, className: 'erase' },
   ];
 
@@ -30,11 +32,12 @@ export const Toolbar: React.FC = () => {
 
   return (
     <div className="toolbar">
-      <div className="toolbar-section tools">
+      <div className="toolbar-section tools" role="group" aria-label="Click the grid to">
         {tools.map(({ label, state, className }) => (
           <button
             key={label}
             className={`toolbar-button ${className} ${activeButton === state ? 'active' : ''}`}
+            aria-pressed={activeButton === state}
             onClick={() => setSelectedButtonState(state)}
           >
             {label}
